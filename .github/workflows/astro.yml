@@ -1,20 +1,20 @@
-# Workflow optimizado para construir y desplegar un sitio Astro en GitHub Pages
-name: Desplegar sitio Astro en GitHub Pages
+# Workflow para construir y desplegar un sitio Astro en GitHub Pages
+name: Desplegar sitio Astro
 
 on:
-  # Ejecutar en push a la rama principal
+  # Se ejecuta en push a la rama principal
   push:
     branches: ["main"]
   # Permite ejecutar este workflow manualmente
   workflow_dispatch:
 
-# Permisos necesarios para el despliegue en GitHub Pages
+# Establece permisos necesarios para GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Evitar despliegues concurrentes
+# Controla despliegues concurrentes
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -26,77 +26,39 @@ jobs:
     steps:
       - name: Checkout del repositorio
         uses: actions/checkout@v4
-      
-      - name: Detectar gestor de paquetes
-        id: detect-package-manager
-        run: |
-          if [ -f "${{ github.workspace }}/pnpm-lock.yaml" ]; then
-            echo "manager=pnpm" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=pnpm" >> $GITHUB_OUTPUT
-            echo "lockfile=pnpm-lock.yaml" >> $GITHUB_OUTPUT
-            exit 0
-          elif [ -f "${{ github.workspace }}/yarn.lock" ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=yarn" >> $GITHUB_OUTPUT
-            echo "lockfile=yarn.lock" >> $GITHUB_OUTPUT
-            exit 0
-          elif [ -f "${{ github.workspace }}/package-lock.json" ]; then
-            echo "manager=npm" >> $GITHUB_OUTPUT
-            echo "command=ci" >> $GITHUB_OUTPUT
-            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
-            echo "lockfile=package-lock.json" >> $GITHUB_OUTPUT
-            exit 0
-          else
-            echo "manager=npm" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
-            echo "lockfile=package-lock.json" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-      
+
       - name: Configurar pnpm
-        if: ${{ steps.detect-package-manager.outputs.manager == 'pnpm' }}
         uses: pnpm/action-setup@v2
         with:
           version: 8
           run_install: false
-      
+
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-          cache-dependency-path: ${{ steps.detect-package-manager.outputs.lockfile }}
-      
-      - name: Configurar cache de build
-        uses: actions/cache@v3
-        with:
-          path: |
-            dist
-            .astro
-          key: ${{ runner.os }}-astro-build-${{ hashFiles('**/*.js', '**/*.ts', '**/*.tsx', '**/*.jsx', '**/*.astro') }}
-          restore-keys: |
-            ${{ runner.os }}-astro-build-
-      
-      - name: Configurar Pages
+          cache: 'pnpm'
+
+      - name: Configurar GitHub Pages
         id: pages
-        uses: actions/configure-pages@v3
-      
+        uses: actions/configure-pages@v4
+
       - name: Instalar dependencias
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-      
+        run: pnpm install --frozen-lockfile
+
       - name: Construir con Astro
         run: |
-          ${{ steps.detect-package-manager.outputs.runner }} astro build \
+          pnpm astro build \
             --site "${{ steps.pages.outputs.origin }}" \
-            --base "${{ steps.pages.outputs.base_path }}"
-      
+            --base "${{ steps.pages.outputs.base_path || '/' }}"
+        env:
+          # Añade variables de entorno aquí si las necesitas
+          NODE_ENV: production
+
       - name: Subir artefacto
         uses: actions/upload-pages-artifact@v2
         with:
-          path: "./dist"
+          path: "dist"
 
   deploy:
     name: Desplegar
@@ -108,4 +70,4 @@ jobs:
     steps:
       - name: Desplegar en GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v3
