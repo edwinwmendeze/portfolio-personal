@@ -15,7 +15,7 @@ export default defineConfig({
     // Optimizaciones para mejorar el rendimiento
     build: {
       cssCodeSplit: true,
-      minify: 'terser',
+      minify: 'esbuild',
       assetsInlineLimit: 4096
     }
   }
