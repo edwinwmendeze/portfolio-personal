@@ -46,14 +46,11 @@ jobs:
       - name: Instalar dependencias
         run: pnpm install --frozen-lockfile
 
-      - name: Instalar terser (dependencia opcional de Vite)
-        run: pnpm add -D terser
-
       - name: Construir con Astro
         run: |
           pnpm astro build \
             --site "${{ steps.pages.outputs.origin }}" \
-            --base "${{ steps.pages.outputs.base_path || '/portfolio-personal' }}"
+            --base "/portfolio-personal"
         env:
           NODE_ENV: production
 
