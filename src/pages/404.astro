@@ -1,5 +1,6 @@
 ---
 import MainLayout from '@layouts/MainLayout.astro';
+import { getPath } from '@utils/routeUtils';
 ---
 
 <MainLayout title="Página no encontrada" description="Error 404 - La página que buscas no existe">
@@ -7,7 +8,7 @@ import MainLayout from '@layouts/MainLayout.astro';
     <h1>404</h1>
     <h2>Página no encontrada</h2>
     <p>Lo sentimos, la página que estás buscando no existe o ha sido movida.</p>
-    <a href="/" class="back-button">Volver al inicio</a>
+    <a href={getPath()} class="back-button">Volver al inicio</a>
   </div>
 </MainLayout>
 

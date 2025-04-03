@@ -2,7 +2,8 @@
 // Importaciones
 import '@styles/global.css';
 import '@styles/print.css';
-import type { LayoutProps } from '../types';
+import type { LayoutProps } from '@types';
+import { getPath } from '@utils/routeUtils';
 
 // Usar la interfaz Props centralizada
 export type Props = LayoutProps;
@@ -46,7 +47,7 @@ const pageDescription = description ||
           <button id="print-button" class="print-action-button">
             Imprimir o Descargar CV
           </button>
-          <a href="/" class="print-action-button secondary">
+          <a href={getPath()} class="print-action-button secondary">
             Volver al portafolio
           </a>
         </div>

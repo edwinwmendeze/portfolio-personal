@@ -1,6 +1,7 @@
 ---
 // src/components/profile/ProjectCard.astro
 import type { Project } from '@types';
+import { getPath } from '@utils/routeUtils';
 
 interface Props {
   project: Project;
@@ -17,7 +18,7 @@ const isGitHub = projectUrl?.hostname === 'github.com';
 <article class:list={['project-card', { featured }]}>
   <div class="project-header">
     <h3 class="project-title">
-      <a href={project.url} target="_blank" rel="noopener noreferrer">
+      <a href={getPath(project.url)} target="_blank" rel="noopener noreferrer">
         {project.name}
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="external-link-icon">
           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>

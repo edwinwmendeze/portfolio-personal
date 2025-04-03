@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   site: 'https://edwinwmendeze.github.io',
-  base: '.',
+  base: '/portfolio-personal',
   output: 'static',
   build: {
     assets: '_assets'

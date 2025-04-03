@@ -9,6 +9,7 @@ import { getProfileData } from '../data/api/profileData';
 import type { Profile } from '@types';
 
 import { getProfileDataWithFallback } from '../data/api/profileData';
+import { getPath } from '@utils/routeUtils';
 
 // Estado para manejo de errores y carga
 let isLoading = true;
@@ -65,7 +66,7 @@ const featuredProjects = profile?.projects?.filter(project => project.featured) 
               )}
             </div>
             <div class="view-all">
-              <a href="/projects" class="button">Ver todos los proyectos</a>
+              <a href={getPath('projects')} class="button">Ver todos los proyectos</a>
             </div>
           </section>
         </div>

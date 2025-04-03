@@ -10,7 +10,8 @@
       "@styles/*": ["src/styles/*"],
       "@types/*": ["src/types/*"],
       "@types": ["src/types/index.ts"],
-      "@data/*": ["@data/*"]
+      "@data/*": ["@data/*"],
+      "@utils/*": ["src/utils/*"]
     }
   },
   "include": ["src/**/*", "astro.config.mjs"],

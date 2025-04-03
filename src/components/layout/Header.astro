@@ -1,5 +1,7 @@
 ---
+// src/components/layout/Header.astro
 import type { Basics } from '@types';
+import { getPath } from '@utils/routeUtils';
 
 export interface Props {
   profileData?: {
@@ -13,15 +15,15 @@ const basics = profileData?.basics;
 
 <header class="site-header">
   <div class="container">
-    <a href="/" class="logo">
+    <a href={getPath()} class="logo">
       {basics ? `${basics.name.charAt(0)}${basics.last_name.charAt(0)}` : 'Portfolio'}
     </a>
     
     <nav class="main-nav">
       <ul>
-        <li><a href="/">Inicio</a></li>
-        <li><a href="/projects">Proyectos</a></li>
-        <li><a href="/resume">CV</a></li>
+        <li><a href={getPath()}>Inicio</a></li>
+        <li><a href={getPath('projects')}>Proyectos</a></li>
+        <li><a href={getPath('resume')}>CV</a></li>
       </ul>
     </nav>
     
