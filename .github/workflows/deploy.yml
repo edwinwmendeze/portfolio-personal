@@ -44,7 +44,8 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Instalar dependencias
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
+        # Quitamos --frozen-lockfile porque el archivo pnpm-lock.yaml no existe
 
       - name: Construir con Astro
         run: |
