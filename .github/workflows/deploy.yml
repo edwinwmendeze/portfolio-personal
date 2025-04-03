@@ -1,51 +1,75 @@
-name: Deploy to GitHub Pages by EdwinWMendez
+# Workflow para construir y desplegar un sitio Astro en GitHub Pages
+name: Desplegar sitio Astro
 
 on:
+  # Se ejecuta en push a la rama principal
   push:
-    branches: [ main ]
+    branches: ["main"]
+  # Permite ejecutar este workflow manualmente
   workflow_dispatch:
 
+# Establece permisos necesarios para GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Controla despliegues concurrentes
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build:
+    name: Construir
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout del repositorio
         uses: actions/checkout@v4
 
-      - name: Setup PNPM
+      - name: Configurar pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
+          run_install: false
 
-      - name: Setup Node
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Configurar GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v4
 
-      - name: Build
-        run: pnpm build
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Instalar terser (dependencia opcional de Vite)
+        run: pnpm add -D terser
+
+      - name: Construir con Astro
+        run: |
+          pnpm astro build \
+            --site "${{ steps.pages.outputs.origin }}" \
+            --base "${{ steps.pages.outputs.base_path || '/portfolio-personal' }}"
+        env:
+          NODE_ENV: production
+
+      - name: Subir artefacto
+        uses: actions/upload-pages-artifact@v2
         with:
-          path: dist
+          path: "dist"
 
   deploy:
+    name: Desplegar
     needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Desplegar en GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v3
