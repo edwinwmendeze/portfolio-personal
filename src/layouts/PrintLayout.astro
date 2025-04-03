@@ -1,0 +1,125 @@
+---
+// Importaciones
+import '@styles/global.css';
+import '@styles/print.css';
+import type { LayoutProps } from '../types';
+
+// Usar la interfaz Props centralizada
+export type Props = LayoutProps;
+
+const { 
+  profileData,
+  title, 
+  description
+} = Astro.props;
+
+// Usar datos dinámicos si están disponibles, o valores predeterminados si no
+const pageTitle = title || 
+  (profileData ? `${profileData.basics.name} ${profileData.basics.last_name} - CV` : 
+  'Currículum Vitae');
+
+const pageDescription = description || 
+  (profileData ? profileData.basics.summary : 
+  'Currículum Vitae del desarrollador');
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Fuentes personalizadas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="print-optimized">
+    <div class="print-container">
+      <header class="print-header">
+        <div class="print-actions">
+          <button id="print-button" class="print-action-button">
+            Imprimir o Descargar CV
+          </button>
+          <a href="/" class="print-action-button secondary">
+            Volver al portafolio
+          </a>
+        </div>
+      </header>
+      
+      <main class="print-content">
+        <slot />
+      </main>
+    </div>
+    
+    <script>
+      // Script para imprimir la página
+      document.getElementById('print-button')?.addEventListener('click', () => {
+        window.print();
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* Estilos específicos para la versión imprimible */
+  .print-optimized {
+    background-color: #f9fafb;
+  }
+  
+  .print-container {
+    max-width: 210mm; /* Tamaño A4 */
+    margin: 0 auto;
+    background-color: white;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .print-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  
+  .print-action-button {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-family-sans);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+  }
+  
+  .print-action-button.secondary {
+    background-color: var(--color-text-light);
+  }
+  
+  .print-action-button:hover {
+    background-color: var(--color-primary-dark);
+  }
+  
+  @media print {
+    .print-optimized {
+      background-color: white;
+    }
+    
+    .print-container {
+      box-shadow: none;
+      padding: 0;
+      max-width: none;
+    }
+    
+    .print-header,
+    .print-actions {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,168 @@
+---
+// src/components/profile/EducationList.astro
+import type { Education } from '@types';
+import ErrorBoundary from '../common/ErrorBoundary.astro';
+
+interface Props {
+  education: Education[];
+  title?: string;
+}
+
+const { education, title = "Formación Académica" } = Astro.props;
+
+// Función para formatear fechas
+function formatDate(dateString: string | undefined): string {
+  if (!dateString) return 'Presente';
+  
+  const date = new Date(dateString);
+  
+  // Verificar si la fecha es válida
+  if (isNaN(date.getTime())) return 'Fecha inválida';
+  
+  // Formatear como "Mes Año"
+  return date.toLocaleDateString('es', {
+    year: 'numeric',
+    month: 'long'
+  });
+}
+
+// Ordenar por fecha (más reciente primero)
+const sortedEducation = [...education].sort((a, b) => {
+  const dateA = a.endDate || '9999-12-31'; // Si no hay fecha de fin, consideramos que es actual
+  const dateB = b.endDate || '9999-12-31';
+  return dateB.localeCompare(dateA);
+});
+
+// Verificar si hay educación para mostrar
+const hasEducation = education.length > 0;
+---
+
+<ErrorBoundary>
+  <section class="education-section">
+    <h2>{title}</h2>
+    
+    {!hasEducation && <p class="no-education">No hay información académica disponible.</p>}
+    
+    {hasEducation && (
+      <ul class="education-list">
+        {sortedEducation.map(edu => {
+          const startDate = formatDate(edu.startDate);
+          const endDate = formatDate(edu.endDate);
+          const dateRange = `${startDate} - ${endDate}`;
+          
+          return (
+            <li class="education-item">
+              <div class="education-period">{dateRange}</div>
+              <div class="education-content">
+                <h3 class="institution">{edu.institution}</h3>
+                <div class="degree">
+                  <span class="study-type">{edu.studyType}</span>
+                  {edu.area && <span class="area">en {edu.area}</span>}
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </section>
+</ErrorBoundary>
+
+<style>
+  .education-section {
+    margin-bottom: var(--space-xl);
+  }
+  
+  h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  
+  .no-education {
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+  
+  .education-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  
+  .education-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-md);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .education-period {
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+  }
+  
+  .institution {
+    font-size: var(--text-md);
+    font-weight: 600;
+    margin: 0 0 var(--space-xs);
+    color: var(--color-text);
+  }
+  
+  .degree {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+  
+  .study-type {
+    font-weight: 500;
+  }
+  
+  /* Estilos para impresión */
+  @media print {
+    .education-section {
+      margin-bottom: var(--space-md);
+    }
+    
+    h2 {
+      font-size: 12pt;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .education-item {
+      grid-template-columns: 150px 1fr;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-sm);
+      page-break-inside: avoid;
+    }
+    
+    .education-period {
+      font-size: 9pt;
+    }
+    
+    .institution {
+      font-size: 10pt;
+    }
+    
+    .degree {
+      font-size: 9pt;
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .education-item {
+      grid-template-columns: 1fr;
+      gap: var(--space-xs);
+    }
+    
+    .education-period {
+      font-weight: 500;
+      color: var(--color-primary);
+    }
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+import type { TagProps } from '@types';
+
+// Usar la interfaz Props centralizada
+export type Props = TagProps;
+
+const { 
+  text, 
+  variant = 'default', 
+  size = 'small',
+  class: className = '' 
+} = Astro.props;
+---
+
+<span class:list={['tag', `tag-${variant}`, `tag-${size}`, className]}>
+  {text}
+</span>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .tag-default {
+    background-color: var(--color-card);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+
+  .tag-primary {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  .tag-outline {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+  }
+
+  .tag-small {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-xs);
+  }
+
+  .tag-medium {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-sm);
+  }
+
+  @media print {
+    .tag {
+      border: 1px solid #ddd;
+      background-color: white;
+      color: black;
+    }
+  }
+</style>

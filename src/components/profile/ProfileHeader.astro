@@ -1,0 +1,218 @@
+---
+// src/components/profile/ProfileHeader.astro
+import type { Basics } from '@types';
+import SocialLinks from '../common/SocialLinks.astro';
+import ErrorBoundary from '../common/ErrorBoundary.astro';
+
+interface Props {
+  basics: Basics;
+}
+
+const { basics } = Astro.props;
+
+// Preparar el texto completo del nombre
+const fullName = `${basics.name} ${basics.last_name}`;
+
+// Formatear la ubicación completa
+const location = [
+  basics.location.city, 
+  basics.location.region, 
+  basics.location.countryCode
+].filter(Boolean).join(', ');
+---
+
+<ErrorBoundary>
+  <header class="profile-header">
+    <div class="container">
+      <div class="avatar-container">
+        <img 
+          src={basics.image.remote || basics.image.local || '/images/placeholder.png'} 
+          alt={`Fotografía de ${fullName}`} 
+          class="avatar"
+          width="150"
+          height="150"
+          loading="eager"
+        />
+      </div>
+      <div class="info-container">
+        <h1>{fullName}</h1>
+        <p class="role">{basics.label}</p>
+        
+        <div class="contact-info">
+          {basics.email && (
+            <div class="contact-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <a href={`mailto:${basics.email}`} class="contact-link">{basics.email}</a>
+            </div>
+          )}
+          
+          {basics.phone && (
+            <div class="contact-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              <a href={`tel:${basics.phone.replace(/\D/g, '')}`} class="contact-link">{basics.phone}</a>
+            </div>
+          )}
+          
+          {basics.url && (
+            <div class="contact-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              <a href={basics.url} target="_blank" rel="noopener noreferrer" class="contact-link">{new URL(basics.url).hostname}</a>
+            </div>
+          )}
+          
+          {location && (
+            <div class="contact-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>{location}</span>
+            </div>
+          )}
+        </div>
+        
+        {basics.summary && <p class="summary">{basics.summary}</p>}
+        
+        {basics.profiles && basics.profiles.length > 0 && (
+          <SocialLinks profiles={basics.profiles} variant="header" />
+        )}
+      </div>
+    </div>
+  </header>
+</ErrorBoundary>
+
+<style>
+  .profile-header {
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-xl);
+  }
+  
+  .container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+  
+  .avatar-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 3px solid var(--color-background);
+  }
+  
+  h1 {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    margin: 0;
+    color: var(--color-text);
+  }
+  
+  .role {
+    font-size: var(--text-lg);
+    color: var(--color-primary);
+    margin: var(--space-xs) 0 var(--space-md);
+    font-weight: 500;
+  }
+  
+  .summary {
+    margin: var(--space-md) 0;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+  }
+  
+  .contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin: var(--space-md) 0;
+  }
+  
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+  
+  .contact-icon {
+    color: var(--color-primary);
+  }
+  
+  .contact-link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  
+  .contact-link:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+  
+  /* Estilos para impresión */
+  @media print {
+    .profile-header {
+      padding: 0;
+      margin-bottom: var(--space-md);
+    }
+    
+    .container {
+      grid-template-columns: auto 1fr;
+      gap: var(--space-md);
+    }
+    
+    .avatar {
+      width: 100px;
+      height: 100px;
+      box-shadow: none;
+      border: 1px solid #eee;
+    }
+    
+    h1 {
+      font-size: 18pt;
+    }
+    
+    .role {
+      font-size: 14pt;
+    }
+    
+    .summary {
+      font-size: 10pt;
+    }
+    
+    .contact-item {
+      font-size: 9pt;
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .container {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    
+    .contact-info {
+      justify-content: center;
+    }
+  }
+</style>

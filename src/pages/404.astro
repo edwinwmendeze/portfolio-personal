@@ -1,0 +1,61 @@
+---
+import MainLayout from '@layouts/MainLayout.astro';
+---
+
+<MainLayout title="Página no encontrada" description="Error 404 - La página que buscas no existe">
+  <div class="error-container">
+    <h1>404</h1>
+    <h2>Página no encontrada</h2>
+    <p>Lo sentimos, la página que estás buscando no existe o ha sido movida.</p>
+    <a href="/" class="back-button">Volver al inicio</a>
+  </div>
+</MainLayout>
+
+<style>
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-2xl) var(--space-md);
+    min-height: 60vh;
+  }
+
+  h1 {
+    font-size: 8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin: 0;
+    line-height: 1;
+    font-family: var(--font-family-mono);
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+    margin: var(--space-md) 0;
+    color: var(--color-text);
+  }
+
+  p {
+    color: var(--color-text-light);
+    margin-bottom: var(--space-lg);
+    max-width: 600px;
+  }
+
+  .back-button {
+    display: inline-block;
+    background-color: var(--color-primary);
+    color: white;
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color var(--transition-fast);
+  }
+
+  .back-button:hover {
+    background-color: var(--color-primary-dark);
+    color: white;
+  }
+</style>

@@ -1,0 +1,56 @@
+:root {
+  /* Colores */
+  --color-primary: #858585;
+  --color-primary-light: #60a5fa;
+  --color-primary-dark: #2563eb;
+  --color-text: #1f2937;
+  --color-text-light: #6b7280;
+  --color-background: #ffffff;
+  --color-card: #f9fafb;
+  --color-border: #e5e7eb;
+  --color-error: #ef4444;
+  
+  /* Tipografía */
+  --font-family-mono: 'Meslo LG', 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+  --font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Espaciados */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  
+  /* Tamaños de letra */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  
+  /* Bordes y sombras */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  
+  /* Transiciones */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+}
+
+/* Tema oscuro (preparado para implementar) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: #f9fafb;
+    --color-text-light: #d1d5db;
+    --color-background: #111827;
+    --color-card: #1f2937;
+    --color-border: #374151;
+  }
+}

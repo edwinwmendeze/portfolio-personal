@@ -1,0 +1,224 @@
+---
+// src/pages/resume.astro
+import PrintLayout from '@layouts/PrintLayout.astro';
+import ProfileHeader from '@components/profile/ProfileHeader.astro';
+import SkillsList from '@components/profile/SkillsList.astro';
+import EducationList from '@components/profile/EducationList.astro';
+import ErrorBoundary from '@components/common/ErrorBoundary.astro';
+import { getProfileDataWithFallback } from '../data/api/profileData';
+import type { Profile } from '@types';
+
+// Utilizamos el método con fallback para mayor robustez
+let profile: Profile | null = null;
+let error: Error | null = null;
+
+try {
+  profile = await getProfileDataWithFallback();
+} catch (e) {
+  error = e instanceof Error ? e : new Error(String(e));
+  console.error('Error al cargar datos del perfil:', error);
+}
+---
+
+<PrintLayout 
+  title={profile ? `CV - ${profile.basics.name} ${profile.basics.last_name}` : 'Currículum Vitae'} 
+  description={profile?.basics.summary || 'Currículum Vitae profesional'}
+  profileData={profile ? { basics: profile.basics } : undefined}
+>
+  {error && (
+    <div class="error-message">
+      <h2>No se pudieron cargar los datos</h2>
+      <p>Hubo un problema al obtener la información del perfil. Por favor, intenta nuevamente más tarde.</p>
+      {import.meta.env.DEV && <pre>{error.message}</pre>}
+    </div>
+  )}
+
+  {profile && (
+    <div class="resume-container">
+      <ErrorBoundary>
+        <ProfileHeader basics={profile.basics} />
+      </ErrorBoundary>
+
+      <div class="resume-content">
+        <ErrorBoundary>
+          <section class="resume-section">
+            <h2>Resumen Profesional</h2>
+            <p class="summary">{profile.basics.summary}</p>
+          </section>
+        </ErrorBoundary>
+
+        <ErrorBoundary>
+          <SkillsList skills={profile.skills} />
+        </ErrorBoundary>
+        
+        <ErrorBoundary>
+          <section class="resume-section">
+            <h2>Proyectos Destacados</h2>
+            {profile.projects.filter(p => p.featured).map(project => (
+              <div class="resume-project">
+                <h3>{project.name}</h3>
+                <p>{project.description}</p>
+                {project.highlights && project.highlights.length > 0 && (
+                  <ul class="project-highlights">
+                    {project.highlights.map(highlight => (
+                      <li>{highlight}</li>
+                    ))}
+                  </ul>
+                )}
+                <div class="project-technologies">
+                  {project.technologies.map(tech => (
+                    <span class="tech-tag">{tech}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </section>
+        </ErrorBoundary>
+        
+        <ErrorBoundary>
+          <EducationList education={profile.education} />
+        </ErrorBoundary>
+
+        <section class="resume-section contact-section">
+          <h2>Información de Contacto</h2>
+          <div class="contact-grid">
+            <div class="contact-item">
+              <strong>Email:</strong> {profile.basics.email}
+            </div>
+            <div class="contact-item">
+              <strong>Teléfono:</strong> {profile.basics.phone}
+            </div>
+            <div class="contact-item">
+              <strong>Web:</strong> {profile.basics.url}
+            </div>
+            <div class="contact-item">
+              <strong>Ubicación:</strong> {profile.basics.location.city}, {profile.basics.location.region}, {profile.basics.location.countryCode}
+            </div>
+          </div>
+          
+          {profile.basics.profiles && profile.basics.profiles.length > 0 && (
+            <div class="social-profiles">
+              {profile.basics.profiles.map(profile => (
+                <div class="social-item">
+                  <strong>{profile.network}:</strong> {profile.url}
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
+  )}
+</PrintLayout>
+
+<style>
+  .resume-container {
+    font-family: var(--font-family-sans);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .resume-content {
+    margin-top: var(--space-xl);
+  }
+
+  .resume-section {
+    margin-bottom: var(--space-xl);
+  }
+
+  .resume-section h2 {
+    font-size: var(--text-xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-xs);
+  }
+
+  .summary {
+    line-height: 1.6;
+  }
+
+  .resume-project {
+    margin-bottom: var(--space-lg);
+  }
+
+  .resume-project h3 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-xs);
+    color: var(--color-text);
+  }
+
+  .project-highlights {
+    margin-top: var(--space-sm);
+    padding-left: var(--space-xl);
+  }
+
+  .project-highlights li {
+    margin-bottom: var(--space-xs);
+  }
+
+  .project-technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+  }
+
+  .tech-tag {
+    font-size: var(--text-xs);
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--color-primary);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+  }
+
+  .contact-section {
+    page-break-inside: avoid;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .contact-item, .social-item {
+    font-size: var(--text-sm);
+  }
+
+  .social-profiles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .error-message {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--color-error);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-xl);
+    text-align: center;
+  }
+
+  @media print {
+    .resume-container {
+      max-width: none;
+    }
+
+    .resume-section {
+      margin-bottom: var(--space-md);
+      page-break-inside: avoid;
+    }
+
+    .resume-section h2 {
+      font-size: 16pt;
+    }
+
+    .tech-tag {
+      background: none;
+      border: 1px solid #ddd;
+    }
+  }
+</style>

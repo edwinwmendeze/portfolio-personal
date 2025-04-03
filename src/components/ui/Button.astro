@@ -1,0 +1,116 @@
+---
+import type { ButtonProps } from '@types';
+
+// Usar la interfaz Props centralizada
+export type Props = ButtonProps;
+
+const { 
+  variant = 'primary', 
+  size = 'medium', 
+  href, 
+  type = 'button', 
+  class: className = '',
+  ariaLabel,
+  download
+} = Astro.props;
+---
+
+{href ? (
+  <a 
+    href={href} 
+    class:list={[
+      'button', 
+      `button-${variant}`, 
+      `button-${size}`,
+      className
+    ]}
+    aria-label={ariaLabel}
+    download={download}
+  >
+    <slot />
+  </a>
+) : (
+  <button 
+    type={type} 
+    class:list={[
+      'button', 
+      `button-${variant}`, 
+      `button-${size}`,
+      className
+    ]}
+    aria-label={ariaLabel}
+  >
+    <slot />
+  </button>
+)}
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid transparent;
+  }
+
+  .button:hover {
+    text-decoration: none;
+  }
+
+  /* Variantes */
+  .button-primary {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  .button-primary:hover {
+    background-color: var(--color-primary-dark);
+  }
+
+  .button-secondary {
+    background-color: var(--color-text-light);
+    color: white;
+  }
+
+  .button-secondary:hover {
+    background-color: var(--color-text);
+  }
+
+  .button-outline {
+    background-color: transparent;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .button-outline:hover {
+    background-color: var(--color-primary-light);
+    color: white;
+  }
+
+  /* Tamaños */
+  .button-small {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-sm);
+  }
+
+  .button-medium {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-md);
+  }
+
+  .button-large {
+    padding: var(--space-md) var(--space-lg);
+    font-size: var(--text-lg);
+  }
+
+  @media print {
+    .button {
+      display: none;
+    }
+  }
+</style>

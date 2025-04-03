@@ -1,0 +1,201 @@
+---
+// src/components/profile/SkillsList.astro
+import type { Skill } from '@types';
+import ErrorBoundary from '../common/ErrorBoundary.astro';
+
+interface Props {
+  skills: Skill[];
+  title?: string;
+}
+
+const { skills, title = "Habilidades" } = Astro.props;
+
+// Agrupar habilidades por tipo
+const hardSkills = skills.filter(skill => skill.type === 'hard');
+const softSkills = skills.filter(skill => skill.type === 'soft');
+
+// Comprobar si hay habilidades para mostrar
+const hasSkills = skills.length > 0;
+---
+
+<ErrorBoundary>
+  <section class="skills-section">
+    <h2>{title}</h2>
+    
+    {!hasSkills && <p class="no-skills">No hay habilidades disponibles.</p>}
+    
+    {hasSkills && (
+      <>
+        {hardSkills.length > 0 && (
+          <div class="skills-group">
+            <h3>Habilidades Técnicas</h3>
+            <ul class="skills-list">
+              {hardSkills.map(skill => (
+                <li class="skill-item">
+                  <div class="skill-header">
+                    <h4>{skill.name}</h4>
+                  </div>
+                  {skill.keywords && skill.keywords.length > 0 && (
+                    <div class="skill-keywords">
+                      {skill.keywords.map(keyword => (
+                        <span class="skill-tag">{keyword}</span>
+                      ))}
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        
+        {softSkills.length > 0 && (
+          <div class="skills-group">
+            <h3>Habilidades Blandas</h3>
+            <ul class="skills-list">
+              {softSkills.map(skill => (
+                <li class="skill-item">
+                  <div class="skill-header">
+                    <h4>{skill.name}</h4>
+                  </div>
+                  {skill.keywords && skill.keywords.length > 0 && (
+                    <div class="skill-keywords">
+                      {skill.keywords.map(keyword => (
+                        <span class="skill-tag">{keyword}</span>
+                      ))}
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </>
+    )}
+  </section>
+</ErrorBoundary>
+
+<style>
+  .skills-section {
+    margin-bottom: var(--space-xl);
+  }
+  
+  h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  
+  h3 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-md);
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+  
+  .no-skills {
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+  
+  .skills-group {
+    margin-bottom: var(--space-lg);
+  }
+  
+  .skills-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--space-md);
+    list-style: none;
+    padding: 0;
+  }
+  
+  .skill-item {
+    background-color: var(--color-card);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+  
+  .skill-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  .skill-header {
+    margin-bottom: var(--space-sm);
+  }
+  
+  h4 {
+    font-size: var(--text-md);
+    margin: 0;
+    color: var(--color-primary);
+    font-weight: 500;
+  }
+  
+  .skill-keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+  
+  .skill-tag {
+    font-size: var(--text-xs);
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--color-primary);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+  }
+  
+  /* Estilos para impresión */
+  @media print {
+    .skills-section {
+      margin-bottom: var(--space-md);
+    }
+    
+    h2, h3 {
+      font-size: 12pt;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .skills-list {
+      display: block;
+    }
+    
+    .skill-item {
+      background: none;
+      border: none;
+      padding: var(--space-xs);
+      margin-bottom: var(--space-xs);
+      page-break-inside: avoid;
+    }
+    
+    .skill-item:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    
+    h4 {
+      font-size: 10pt;
+    }
+    
+    .skill-keywords {
+      font-size: 9pt;
+    }
+    
+    .skill-tag {
+      background: none;
+      border: 1px solid #ddd;
+      padding: 1px 4px;
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .skills-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

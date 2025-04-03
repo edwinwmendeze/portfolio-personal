@@ -1,0 +1,90 @@
+---
+// src/components/common/ErrorBoundary.astro
+import type { ErrorBoundaryProps } from '@types';
+
+// Usar la interfaz Props centralizada
+export type Props = ErrorBoundaryProps;
+
+const { fallback = "No pudimos cargar esta sección. Por favor, intenta más tarde." } = Astro.props;
+
+// Variables para manejar el estado de error
+let hasError = false;
+let errorMessage = "";
+
+// Intentar renderizar el contenido
+try {
+  await Astro.slots.render('default');
+} catch (error) {
+  hasError = true;
+  if (error instanceof Error) {
+    errorMessage = error.message;
+  } else {
+    errorMessage = String(error);
+  }
+  
+  // Log del error en desarrollo
+  if (import.meta.env.DEV) {
+    console.error("Error en componente:", error);
+  }
+}
+---
+
+{hasError ? (
+  <div class="error-container" role="alert">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="error-icon">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <h2>Algo salió mal</h2>
+    <p>{fallback}</p>
+    {import.meta.env.DEV && (
+      <details>
+        <summary>Detalles del error (solo visible en desarrollo)</summary>
+        <pre>{errorMessage}</pre>
+      </details>
+    )}
+  </div>
+) : (
+  <slot />
+)}
+
+<style>
+  .error-container {
+    padding: var(--space-lg);
+    border: 1px solid var(--color-error);
+    border-radius: var(--radius-md);
+    color: var(--color-error);
+    background-color: rgba(239, 68, 68, 0.1);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .error-icon {
+    margin-bottom: var(--space-sm);
+    color: var(--color-error);
+  }
+  
+  .error-container h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-sm);
+  }
+  
+  details {
+    margin-top: var(--space-md);
+  }
+  
+  summary {
+    cursor: pointer;
+    font-weight: 500;
+    margin-bottom: var(--space-sm);
+  }
+  
+  pre {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: var(--space-md);
+    border-radius: var(--radius-sm);
+    overflow-x: auto;
+    font-family: var(--font-family-mono);
+    font-size: var(--text-sm);
+  }
+</style>

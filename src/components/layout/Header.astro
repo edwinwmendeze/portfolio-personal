@@ -1,0 +1,93 @@
+---
+import type { Basics } from '@types';
+
+export interface Props {
+  profileData?: {
+    basics: Basics;
+  };
+}
+
+const { profileData } = Astro.props;
+const basics = profileData?.basics;
+---
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo">
+      {basics ? `${basics.name.charAt(0)}${basics.last_name.charAt(0)}` : 'Portfolio'}
+    </a>
+    
+    <nav class="main-nav">
+      <ul>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/projects">Proyectos</a></li>
+        <li><a href="/resume">CV</a></li>
+      </ul>
+    </nav>
+    
+    <button id="print-btn" data-print class="print-button">
+      Imprimir
+    </button>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+  }
+  
+  .logo {
+    font-family: var(--font-family-mono);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  
+  .main-nav ul {
+    display: flex;
+    gap: var(--space-lg);
+    list-style: none;
+  }
+  
+  .main-nav a {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  
+  .main-nav a:hover {
+    color: var(--color-primary);
+  }
+  
+  .print-button {
+    background-color: transparent;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .print-button:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  @media print {
+    .site-header {
+      display: none;
+    }
+  }
+</style>
