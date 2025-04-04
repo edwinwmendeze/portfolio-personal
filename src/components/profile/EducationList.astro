@@ -52,9 +52,11 @@ const hasEducation = education.length > 0;
           
           return (
             <li class="education-item">
-              <div class="education-period">{dateRange}</div>
               <div class="education-content">
-                <h3 class="institution">{edu.institution}</h3>
+                <div class="education-header">
+                  <h3 class="institution">{edu.institution}</h3>
+                  <div class="education-period">{dateRange}</div>
+                </div>
                 <div class="degree">
                   <span class="study-type">{edu.studyType}</span>
                   {edu.area && <span class="area">en {edu.area}</span>}
@@ -94,23 +96,37 @@ const hasEducation = education.length > 0;
   }
   
   .education-item {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: var(--space-md);
-    padding-bottom: var(--space-md);
-    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-card);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+  
+  .education-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  .education-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-xs);
   }
   
   .education-period {
     color: var(--color-text-secondary);
     font-size: var(--text-sm);
+    white-space: nowrap;
+    margin-left: var(--space-sm);
   }
   
   .institution {
     font-size: var(--text-md);
     font-weight: 600;
-    margin: 0 0 var(--space-xs);
-    color: var(--color-text);
+    margin: 0;
+    color: var(--color-primary);
   }
   
   .degree {
@@ -134,14 +150,27 @@ const hasEducation = education.length > 0;
     }
     
     .education-item {
-      grid-template-columns: 150px 1fr;
-      gap: var(--space-sm);
-      padding-bottom: var(--space-sm);
+      background: none;
+      border: none;
+      padding: var(--space-sm);
+      margin-bottom: var(--space-sm);
       page-break-inside: avoid;
+      box-shadow: none;
+    }
+    
+    .education-item:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .education-header {
+      flex-direction: column;
     }
     
     .education-period {
       font-size: 9pt;
+      margin-left: 0;
+      margin-top: var(--space-xs);
     }
     
     .institution {
@@ -154,13 +183,14 @@ const hasEducation = education.length > 0;
   }
   
   /* Responsive */
-  @media (max-width: 640px) {
-    .education-item {
-      grid-template-columns: 1fr;
-      gap: var(--space-xs);
+  @media (max-width: 768px) {
+    .education-header {
+      flex-direction: column;
     }
     
     .education-period {
+      margin-left: 0;
+      margin-top: var(--space-xs);
       font-weight: 500;
       color: var(--color-primary);
     }
