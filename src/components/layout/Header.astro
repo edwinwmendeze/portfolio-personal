@@ -31,6 +31,7 @@ const basics = profileData?.basics;
       <ul class="nav-menu">
         <li><a href={getPath()}>Inicio</a></li>
         <li><a href={getPath('projects')}>Proyectos</a></li>
+        <li><a href={getPath('contact')}>Contacto</a></li>
       </ul>
     </nav>
     
@@ -118,8 +119,6 @@ const basics = profileData?.basics;
 <style>
   .site-header {
     padding: var(--space-md) 0;
-    border-bottom: 1px solid var(--color-border);
-    box-shadow: var(--shadow-sm);
     position: fixed;
     top: 0;
     left: 0;
@@ -145,6 +144,7 @@ const basics = profileData?.basics;
     margin: 0 auto;
     padding: 0 var(--space-md);
     height: 4rem;
+    border-bottom: 1px solid var(--color-border);
   }
   
   .logo {
