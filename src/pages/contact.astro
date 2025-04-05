@@ -80,6 +80,7 @@ const profile = await getProfileDataWithFallback();
           <!-- Quitamos _next ya que usamos AJAX y no queremos redireccionamiento -->
           <input type="hidden" name="_subject" value="Nuevo mensaje desde el portfolio">
           <input type="hidden" name="_format" value="json">
+          <input type="hidden" name="_captcha" value="true">
           <div class="form-group">
             <label for="name">Nombre</label>
             <input type="text" id="name" name="name" required>  
