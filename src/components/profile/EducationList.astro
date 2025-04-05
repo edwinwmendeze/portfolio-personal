@@ -2,13 +2,15 @@
 // src/components/profile/EducationList.astro
 import type { Education } from '@types';
 import ErrorBoundary from '../common/ErrorBoundary.astro';
+import Tag from '../ui/Tag.astro';
+import Card from '../ui/Card.astro';
 
 interface Props {
   education: Education[];
-  title?: string;
+  showTitle?: boolean;
 }
 
-const { education, title = "Formación Académica" } = Astro.props;
+const { education, showTitle = true } = Astro.props;
 
 // Función para formatear fechas
 function formatDate(dateString: string | undefined): string {
@@ -35,56 +37,57 @@ const sortedEducation = [...education].sort((a, b) => {
 
 // Verificar si hay educación para mostrar
 const hasEducation = education.length > 0;
+
 ---
 
 <ErrorBoundary>
-  <section class="education-section">
-    <h2>{title}</h2>
+  <div class="education-container">
+    {showTitle && <h2 class="component-title">Formación Académica</h2>}
     
     {!hasEducation && <p class="no-education">No hay información académica disponible.</p>}
     
     {hasEducation && (
-      <ul class="education-list">
-        {sortedEducation.map(edu => {
-          const startDate = formatDate(edu.startDate);
-          const endDate = formatDate(edu.endDate);
-          const dateRange = `${startDate} - ${endDate}`;
-          
-          return (
-            <li class="education-item">
-              <div class="education-content">
-                <div class="education-header">
-                  <h3 class="institution">{edu.institution}</h3>
-                  <div class="education-period">{dateRange}</div>
+      <Card variant="border" class="education-card">
+        <ul class="education-list">
+          {sortedEducation.map(edu => {
+            const startDate = formatDate(edu.startDate);
+            const endDate = formatDate(edu.endDate);
+            const dateRange = `${startDate} - ${endDate}`;
+            
+            return (
+              <li class="education-item">
+                <div class="education-content">
+                  <div class="education-header">
+                    <h3 class="institution">{edu.institution}</h3>
+                    <Tag text={dateRange} variant="default" size="small" class="education-period" />
+                  </div>
+                  <div class="degree">
+                    <span class="study-type">{edu.studyType}</span>
+                    {edu.area && <span class="area">en {edu.area}</span>}
+                  </div>
                 </div>
-                <div class="degree">
-                  <span class="study-type">{edu.studyType}</span>
-                  {edu.area && <span class="area">en {edu.area}</span>}
-                </div>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+              </li>
+            );
+          })}
+        </ul>
+      </Card>
     )}
-  </section>
+  </div>
 </ErrorBoundary>
 
 <style>
-  .education-section {
+  .education-container {
+    width: 100%;
     margin-bottom: var(--space-xl);
-  }
-  
-  h2 {
-    font-size: var(--text-xl);
-    margin-bottom: var(--space-md);
-    color: var(--color-text);
-    font-weight: 600;
   }
   
   .no-education {
     color: var(--color-text-secondary);
     font-style: italic;
+  }
+  
+  .education-card {
+    padding: var(--space-md);
   }
   
   .education-list {
@@ -96,10 +99,10 @@ const hasEducation = education.length > 0;
   }
   
   .education-item {
-    background-color: var(--color-card);
-    border-radius: var(--radius-md);
-    padding: var(--space-md);
+    padding: var(--space-sm);
     border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-background);
     transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   }
   
@@ -116,9 +119,6 @@ const hasEducation = education.length > 0;
   }
   
   .education-period {
-    color: var(--color-text-secondary);
-    font-size: var(--text-sm);
-    white-space: nowrap;
     margin-left: var(--space-sm);
   }
   
@@ -126,7 +126,7 @@ const hasEducation = education.length > 0;
     font-size: var(--text-md);
     font-weight: 600;
     margin: 0;
-    color: var(--color-primary);
+    color: var(--color-text);
   }
   
   .degree {
@@ -140,13 +140,8 @@ const hasEducation = education.length > 0;
   
   /* Estilos para impresión */
   @media print {
-    .education-section {
+    .education-container {
       margin-bottom: var(--space-md);
-    }
-    
-    h2 {
-      font-size: 12pt;
-      margin-bottom: var(--space-sm);
     }
     
     .education-item {
@@ -168,7 +163,6 @@ const hasEducation = education.length > 0;
     }
     
     .education-period {
-      font-size: 9pt;
       margin-left: 0;
       margin-top: var(--space-xs);
     }
@@ -186,13 +180,12 @@ const hasEducation = education.length > 0;
   @media (max-width: 768px) {
     .education-header {
       flex-direction: column;
+      align-items: flex-start;
     }
     
     .education-period {
       margin-left: 0;
       margin-top: var(--space-xs);
-      font-weight: 500;
-      color: var(--color-primary);
     }
   }
 </style>

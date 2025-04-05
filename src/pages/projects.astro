@@ -31,7 +31,12 @@ const sortedProjects = profile?.projects?.sort((a, b) => {
 }) || [];
 ---
 
-<MainLayout title="Proyectos | Portfolio" description="Todos los proyectos y trabajos realizados">
+<MainLayout 
+  title="Proyectos | Portfolio" 
+  description="Todos los proyectos y trabajos realizados"
+  profileData={profile ? { basics: profile.basics } : undefined}
+  showPrintButton={false}
+>
   {isLoading && (
     <div class="loading-state">
       <p>Cargando información de proyectos...</p>
@@ -106,7 +111,7 @@ const sortedProjects = profile?.projects?.sort((a, b) => {
   }
 
   .projects-page-container {
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
     padding: var(--space-xl) var(--space-md);
   }

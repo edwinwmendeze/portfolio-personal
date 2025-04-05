@@ -9,6 +9,8 @@ export interface ButtonProps {
   class?: string;
   ariaLabel?: string;
   download?: boolean | string;
+  id?: string;
+  [key: string]: any; // Para permitir atributos data-* y otros atributos HTML
 }
 
 export interface CardProps {

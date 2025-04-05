@@ -4,12 +4,15 @@ import '@styles/global.css';
 import type { LayoutProps } from '@types'
 
 // Usar la interfaz Props centralizada
-export type Props = LayoutProps;
+export type Props = LayoutProps & {
+  showPrintButton?: boolean;
+};
 
 const { 
   profileData,
   title, 
-  description
+  description,
+  showPrintButton = false
 } = Astro.props;
 
 // Usar datos dinámicos si están disponibles, o valores predeterminados si no
@@ -48,7 +51,7 @@ import Footer from '@components/layout/Footer.astro';
   </head>
   <body>
     <div class="site-container">
-      <Header profileData={profileData} />
+      <Header profileData={profileData} showPrintButton={showPrintButton} />
       
       <main>
         <slot />
@@ -83,11 +86,13 @@ import Footer from '@components/layout/Footer.astro';
     max-width: 65rem;
     margin: 0 auto;
     padding: var(--space-lg) var(--space-md);
+    padding-top: calc(var(--space-lg) + 4rem); /* Ajustado para compensar el header fijo */
   }
   
   @media (max-width: 768px) {
     main {
       padding: var(--space-md) var(--space-sm);
+      padding-top: calc(var(--space-md) + 4rem); /* Ajustado para móviles */
     }
   }
   

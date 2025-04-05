@@ -1,0 +1,69 @@
+---
+// src/components/profile/FeaturedProjects.astro
+import type { Project } from '@types';
+import ProjectCard from './ProjectCard.astro';
+import ErrorBoundary from '../common/ErrorBoundary.astro';
+import Card from '../ui/Card.astro';
+
+interface Props {
+  projects: Project[];
+  showTitle?: boolean;
+}
+
+const { projects, showTitle = true } = Astro.props;
+
+// Filtrar los proyectos destacados
+const featuredProjects = projects.filter(p => p.featured);
+const hasProjects = featuredProjects.length > 0;
+---
+
+<ErrorBoundary>
+  <div class="featured-projects">
+    {showTitle && <h2 class="component-title">Proyectos Destacados</h2>}
+    
+    {!hasProjects && <p class="no-projects">No hay proyectos destacados disponibles.</p>}
+    
+    {hasProjects && (
+      <Card variant="border" class="projects-container">
+        <div class="projects-grid">
+          {featuredProjects.map(project => (
+            <ProjectCard project={project} showTitle={false} featured={true} />
+          ))}
+        </div>
+      </Card>
+    )}
+  </div>
+</ErrorBoundary>
+
+<style>
+  .featured-projects {
+    margin-bottom: var(--space-xl);
+  }
+  
+  .no-projects {
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+  
+  .projects-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+  
+  @media print {
+    .featured-projects {
+      margin-bottom: var(--space-md);
+    }
+    
+    .projects-grid {
+      gap: var(--space-sm);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .projects-grid {
+      gap: var(--space-lg);
+    }
+  }
+</style>

@@ -10,8 +10,8 @@ const { profiles, variant = 'default', class: className = '' } = Astro.props;
 
 // Mapa de iconos para redes sociales
 const iconMap: Record<string, string> = {
-  GitHub: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>`,
-  LinkedIn: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>`,
+  GitHub: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="social-icon"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.24.73-.53v-1.85c-3.03.64-3.67-1.46-3.67-1.46-.47-1.29-1.2-1.64-1.2-1.64-.98-.67.07-.66.07-.66 1.09.08 1.66 1.13 1.66 1.13.96 1.66 2.52 1.18 3.14.9.1-.7.37-1.18.67-1.45-2.34-.26-4.8-1.18-4.8-5.24 0-1.16.41-2.1 1.08-2.84-.11-.26-.47-1.35.1-2.8 0 0 .88-.28 2.9 1.1a9.53 9.53 0 015.1 0c2-1.38 2.9-1.1 2.9-1.1.57 1.45.2 2.54.1 2.8.67.74 1.08 1.68 1.08 2.84 0 4.07-2.47 4.98-4.82 5.23.38.33.71.97.71 1.96v2.91c0 .28.18.62.74.52A11 11 0 0012 1.27"></path></svg>`,
+  LinkedIn: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="social-icon"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path></svg>`,
 };
 
 ---
@@ -48,12 +48,20 @@ const iconMap: Record<string, string> = {
     align-items: center;
     gap: var(--space-sm);
     text-decoration: none;
-    color: var(--color-text);
+    color: var(--color-primary);
     transition: color var(--transition-fast);
   }
   
   .social-links a:hover {
-    color: var(--color-primary);
+    color: var(--color-primary-dark);
+  }
+  
+  .social-icon {
+    transition: transform 0.2s ease;
+  }
+  
+  .social-links a:hover .social-icon {
+    transform: scale(1.1);
   }
   
   .print-only {

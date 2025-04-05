@@ -1,15 +1,17 @@
 :root {
   /* Colores */
-  --color-primary: #dd2222;
-  --color-primary-light: #60a5fa;
-  --color-primary-dark: #2563eb;
+  --color-primary: #00aab3;
+  --color-primary-light: #009fa8;
+  --color-primary-dark: #009fa8;
   --color-text: #1f2937;
   --color-text-light: #6b7280;
   --color-background: #ffffff;
   --color-card: #f9fafb;
   --color-border: #e5e7eb;
   --color-error: #ef4444;
-  
+  --color-action-light: #eeeeee;
+  --color-action-dark: #1e409f;
+
   /* Tipografía */
   --font-family-mono: 'Meslo LG', 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
   --font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -52,5 +54,9 @@
     --color-background: #111827;
     --color-card: #1f2937;
     --color-border: #374151;
+    --color-action-light: #eeeeee;
+    --color-action-dark: #1e409f;
+    --color-social: #1e409f;
+    --color-primary: #009fa8;
   }
 }

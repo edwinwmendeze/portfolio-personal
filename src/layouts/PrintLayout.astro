@@ -4,6 +4,7 @@ import '@styles/global.css';
 import '@styles/print.css';
 import type { LayoutProps } from '@types';
 import { getPath } from '@utils/routeUtils';
+import Button from '@components/ui/Button.astro';
 
 // Usar la interfaz Props centralizada
 export type Props = LayoutProps;
@@ -44,12 +45,24 @@ const pageDescription = description ||
     <div class="print-container">
       <header class="print-header">
         <div class="print-actions">
-          <button id="print-button" class="print-action-button">
-            Imprimir o Descargar CV
-          </button>
-          <a href={getPath()} class="print-action-button secondary">
-            Volver al portafolio
-          </a>
+          <Button 
+            id="print-button" 
+            variant="outline" 
+            size="small" 
+            class="print-action-icon"
+            ariaLabel="Imprimir o Descargar CV"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          </Button>
+          <Button 
+            href={getPath()} 
+            variant="outline" 
+            size="small" 
+            class="print-action-icon"
+            ariaLabel="Volver al portafolio"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </Button>
         </div>
       </header>
       
@@ -84,27 +97,29 @@ const pageDescription = description ||
   .print-actions {
     display: flex;
     gap: 1rem;
-    justify-content: center;
+    justify-content: flex-end; /* Alineados a la derecha */
     margin-bottom: 2rem;
   }
   
-  .print-action-button {
-    padding: 0.75rem 1.5rem;
-    background-color: var(--color-primary);
-    color: white;
-    border: none;
-    border-radius: var(--radius-md);
-    font-family: var(--font-family-sans);
-    cursor: pointer;
-    transition: background-color var(--transition-fast);
+  .print-action-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 48px !important;
+    height: 48px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
   }
   
-  .print-action-button.secondary {
-    background-color: var(--color-text-light);
+  .print-action-icon:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15) !important;
   }
   
-  .print-action-button:hover {
-    background-color: var(--color-primary-dark);
+  .print-action-icon:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
   }
   
   @media print {

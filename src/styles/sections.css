@@ -1,0 +1,71 @@
+/* Estilos globales para secciones y componentes */
+
+/* Secciones base para todo el sitio */
+.section {
+  margin-bottom: var(--space-xl);
+}
+
+/* Estilo de encabezado común para todas las secciones */
+.section-header {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-md);
+  color: var(--color-text);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--color-primary);
+}
+
+/* Variante para la página principal (ligeramente más grande) */
+.section-header-main {
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-lg);
+}
+
+/* Separador de componentes con línea de color primario */
+.component-divider {
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+/* Versión más sutil del separador */
+.component-divider-subtle {
+  border-bottom: 1px solid var(--color-primary);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+/* Título para componentes */
+.component-title {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-md);
+  color: var(--color-text);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--color-primary);
+}
+
+/* Contenedor de sección para resumir componentes */
+.section-container {
+  margin-bottom: var(--space-xl);
+}
+
+/* Ajustes para impresión */
+@media print {
+  .section,
+  .section-container {
+    margin-bottom: var(--space-md);
+  }
+  
+  .section-header,
+  .component-title {
+    font-size: 14pt;
+    margin-bottom: var(--space-xs);
+    padding-bottom: 2px;
+  }
+  
+  .component-divider,
+  .component-divider-subtle {
+    border-bottom-width: 1px;
+    padding-bottom: var(--space-xs);
+    margin-bottom: var(--space-md);
+  }
+}

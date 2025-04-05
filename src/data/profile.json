@@ -35,7 +35,8 @@
       "keywords": [
         "Python-DRF",
         "PostgreSQL",
-        "Supabase"
+        "Supabase",
+        "Postman"
       ],
       "type": "hard"
     },
@@ -44,7 +45,8 @@
       "keywords": [
         "Vue.js",
         "Nuxt",
-        "Astro"
+        "Astro",
+        "Tailwind CSS"
       ],
       "type": "hard"
     },

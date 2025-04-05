@@ -1,0 +1,87 @@
+---
+import type { Basics, Profile } from '@types';
+import ErrorBoundary from '@components/common/ErrorBoundary.astro';
+import Card from '../ui/Card.astro';
+
+interface Props {
+  basics: Basics;
+  showTitle?: boolean;
+}
+
+const { basics, showTitle = true } = Astro.props;
+---
+
+<ErrorBoundary>
+  <div class="contact-container">
+    {showTitle && <h2 class="component-title">Información de Contacto</h2>}
+    <Card variant="border">
+      <div class="contact-grid">
+        <div class="contact-item">
+          <strong>Email:</strong> {basics.email}
+        </div>
+        <div class="contact-item">
+          <strong>Teléfono:</strong> {basics.phone}
+        </div>
+        <div class="contact-item">
+          <strong>Web:</strong> {basics.url}
+        </div>
+        <div class="contact-item">
+          <strong>Ubicación:</strong> {basics.location.city}, {basics.location.region}, {basics.location.countryCode}
+        </div>
+      </div>
+      
+      {basics.profiles && basics.profiles.length > 0 && (
+        <div class="social-profiles">
+          {basics.profiles.map(profile => (
+            <div class="social-item">
+              <strong>{profile.network}:</strong> {profile.url}
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
+  </div>
+</ErrorBoundary>
+
+<style>
+  .contact-container {
+    width: 100%;
+    margin-bottom: var(--space-xl);
+  }
+  
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .contact-item, .social-item {
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-xs);
+  }
+
+  .social-profiles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  /* Media queries para responsividad */
+  @media (max-width: 600px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-sm);
+    }
+  }
+
+  @media print {
+    .contact-container {
+      margin-bottom: var(--space-md);
+    }
+    
+    .contact-grid {
+      gap: var(--space-xs);
+    }
+  }
+</style>

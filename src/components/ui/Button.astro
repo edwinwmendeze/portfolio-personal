@@ -11,7 +11,9 @@ const {
   type = 'button', 
   class: className = '',
   ariaLabel,
-  download
+  download,
+  id,
+  ...rest
 } = Astro.props;
 ---
 
@@ -26,6 +28,8 @@ const {
     ]}
     aria-label={ariaLabel}
     download={download}
+    id={id}
+    {...rest}
   >
     <slot />
   </a>
@@ -39,6 +43,8 @@ const {
       className
     ]}
     aria-label={ariaLabel}
+    id={id}
+    {...rest}
   >
     <slot />
   </button>
