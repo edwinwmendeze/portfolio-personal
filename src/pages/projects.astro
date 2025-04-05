@@ -1,0 +1,173 @@
+---
+// src/pages/projects.astro
+import MainLayout from '@layouts/MainLayout.astro';
+import ProjectCard from '@components/profile/ProjectCard.astro';
+import ErrorBoundary from '@components/common/ErrorBoundary.astro';
+import { getProfileDataWithFallback } from '../data/api/profileData';
+import type { Profile } from '@types';
+
+// Estado para manejo de errores y carga
+let isLoading = true;
+let error: Error | null = null;
+let profile: Profile | null = null;
+
+try {
+  profile = await getProfileDataWithFallback();
+  isLoading = false;
+} catch (e) {
+  error = e instanceof Error ? e : new Error(String(e));
+  isLoading = false;
+  console.error('Error al cargar datos del perfil:', error);
+}
+
+// Ordenar proyectos: primero los destacados
+const sortedProjects = profile?.projects?.sort((a, b) => {
+  // Primero mostrar proyectos destacados
+  if (a.featured && !b.featured) return -1;
+  if (!a.featured && b.featured) return 1;
+  
+  // Si ambos tienen el mismo estado de destacado, ordenar alfabéticamente por nombre
+  return a.name.localeCompare(b.name);
+}) || [];
+---
+
+<MainLayout title="Proyectos | Portfolio" description="Todos los proyectos y trabajos realizados">
+  {isLoading && (
+    <div class="loading-state">
+      <p>Cargando información de proyectos...</p>
+    </div>
+  )}
+
+  {error && (
+    <div class="error-state">
+      <h2>No se pudieron cargar los datos</h2>
+      <p>Hubo un problema al obtener la información del perfil. Por favor, intenta nuevamente más tarde.</p>
+      {import.meta.env.DEV && <pre>{error.message}</pre>}
+    </div>
+  )}
+
+  {profile && (
+    <div class="projects-page-container">
+      <h1 class="page-title">Proyectos</h1>
+      
+      <div class="projects-filters">
+        <p class="projects-count">
+          <span class="highlight">{sortedProjects.length}</span> proyectos en total
+          {sortedProjects.filter(p => p.featured).length > 0 && (
+            <span class="featured-count">
+              (<span class="highlight">{sortedProjects.filter(p => p.featured).length}</span> destacados)
+            </span>
+          )}
+        </p>
+      </div>
+
+      <div class="projects-grid">
+        {sortedProjects.length > 0 ? (
+          sortedProjects.map(project => (
+            <ErrorBoundary>
+              <ProjectCard 
+                project={project} 
+                featured={project.featured} 
+              />
+            </ErrorBoundary>
+          ))
+        ) : (
+          <p class="no-content">No hay proyectos disponibles.</p>
+        )}
+      </div>
+    </div>
+  )}
+</MainLayout>
+
+<style>
+  .loading-state, .error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl) 0;
+    text-align: center;
+  }
+
+  .error-state h2 {
+    color: var(--color-error-text);
+    margin-bottom: var(--space-md);
+  }
+
+  .error-state pre {
+    margin-top: var(--space-md);
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: var(--space-md);
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: var(--font-family-mono);
+    text-align: left;
+    max-width: 100%;
+  }
+
+  .projects-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .page-title {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-lg);
+    color: var(--color-text);
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: var(--space-xs);
+  }
+
+  .projects-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  .projects-count {
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+  }
+
+  .highlight {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .featured-count {
+    margin-left: var(--space-xs);
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .no-content {
+    color: var(--color-text-muted);
+    font-style: italic;
+    text-align: center;
+    padding: var(--space-xl) 0;
+  }
+
+  @media (max-width: 768px) {
+    .projects-filters {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-md);
+    }
+  }
+
+  @media print {
+    .projects-filters {
+      display: none;
+    }
+
+    .projects-page-container {
+      padding: 0;
+    }
+  }
+</style>
