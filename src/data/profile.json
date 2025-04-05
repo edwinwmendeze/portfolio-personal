@@ -33,14 +33,9 @@
     {
       "name": "Backend",
       "keywords": [
-        "Python",
-        "Django",
-        "Django REST Framework",
-        "FastAPI",
-        "Flask",
+        "Python-DRF",
         "PostgreSQL",
-        "Supabase",
-        "Redis"
+        "Supabase"
       ],
       "type": "hard"
     },
@@ -49,9 +44,7 @@
       "keywords": [
         "Vue.js",
         "Nuxt",
-        "Astro",
-        "Typescript",
-        "TailwindCSS"
+        "Astro"
       ],
       "type": "hard"
     },
@@ -59,18 +52,13 @@
       "name": "DevOps & Cloud",
       "keywords": [
         "Docker",
-        "Docker Compose",
         "Git",
         "GitHub",
         "GitHub Actions",
         "Vercel",
         "DigitalOcean",
-        "Firebase",
         "Google Cloud",
-        "AWS",
-        "Azure",
-        "Nginx",
-        "DNS y dominios"
+        "AWS"
       ],
       "type": "hard"
     },
@@ -78,9 +66,6 @@
       "name": "Automatización e Inteligencia Artificial",
       "keywords": [
         "Selenium",
-        "OpenAI API",
-        "Pandas",
-        "NumPy",
         "Automatización con Python"
       ],
       "type": "hard"
@@ -90,12 +75,10 @@
       "keywords": [
         "Trabajo en equipo",
         "Trabajo bajo presión",
-        "Análisis profundo",
         "Resolución de problemas",
         "Pensamiento crítico",
         "Adaptabilidad",
-        "Aprendizaje continuo",
-        "Gestión del tiempo"
+        "Aprendizaje continuo"
       ],
       "type": "soft"
     }
