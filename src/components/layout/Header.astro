@@ -31,36 +31,102 @@ const basics = profileData?.basics;
       <ul class="nav-menu">
         <li><a href={getPath()}>Inicio</a></li>
         <li><a href={getPath('projects')}>Proyectos</a></li>
-        <li><a href={getPath('resume')}>CV</a></li>
       </ul>
     </nav>
     
-    {showPrintButton && (
-      <Button 
-        id="print-btn" 
-        data-print 
-        variant="outline" 
-        size="small"
-        ariaLabel="Imprimir CV"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-        <span class="print-text">Imprimir</span>
-      </Button>
-    )}
+    <div class="buttons-container">
+      <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+      {showPrintButton && (
+        <Button 
+          id="print-btn" 
+          data-print 
+          variant="outline" 
+          size="small"
+          ariaLabel="Imprimir CV"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          <span class="print-text">Imprimir</span>
+        </Button>
+      )}
+    </div>
   </div>
 </header>
+
+<script>
+  // Gestión del tema claro/oscuro
+  document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    
+    // Verificar si hay un tema guardado en localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+    
+    // Actualizar la apariencia del botón según el tema actual
+    updateThemeToggle();
+    
+    // Manejar el clic en el botón de tema
+    themeToggle?.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      updateThemeToggle();
+    });
+  });
+  
+  // Actualizar la apariencia del botón según el tema actual
+  function updateThemeToggle() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const themeToggle = document.getElementById('theme-toggle');
+    
+    if (currentTheme === 'dark') {
+      themeToggle?.classList.add('dark-mode');
+    } else {
+      themeToggle?.classList.remove('dark-mode');
+    }
+  }
+  
+  // Gestión del botón de impresión
+  const printButton = document.getElementById('print-btn');
+  if (printButton) {
+    printButton.addEventListener('click', () => {
+      window.print();
+    });
+  }
+</script>
 
 <style>
   .site-header {
     padding: var(--space-md) 0;
     border-bottom: 1px solid var(--color-border);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-sm);
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.75);
+    background-color: var(--color-background);
+    opacity: 0.97;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     z-index: 1000;
@@ -161,6 +227,62 @@ const basics = profileData?.basics;
     width: 100%;
   }
   
+  /* Botón de tema */
+  .buttons-container {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+  
+  .theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--color-text);
+    transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .theme-toggle:hover {
+    background-color: var(--color-action-light);
+    transform: translateY(-2px);
+  }
+  
+  .sun-icon, .moon-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease, transform 0.5s ease;
+  }
+  
+  .sun-icon {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0);
+  }
+  
+  .moon-icon {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+  
+  .theme-toggle.dark-mode .sun-icon {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+  
+  .theme-toggle.dark-mode .moon-icon {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0);
+  }
+  
   /* Responsive styles */
   @media (max-width: 768px) {
     .container {
@@ -182,7 +304,7 @@ const basics = profileData?.basics;
       display: block;
       height: 2px;
       width: 100%;
-      background-color: var(--color-text);
+      background-color: var(--color-text-inverted);
       border-radius: 2px;
       transition: all 0.3s ease;
     }
@@ -196,7 +318,7 @@ const basics = profileData?.basics;
       max-width: 300px;
       height: auto;
       max-height: auto;
-      background-color: rgba(255, 255, 255, 0.99);
+      background-color: var(--color-card);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       flex-direction: column;

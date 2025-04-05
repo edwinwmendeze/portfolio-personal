@@ -1,49 +1,34 @@
 ---
+// src/pages/resume.astro
 import MainLayout from '@layouts/MainLayout.astro';
 import ProfileHeader from '@components/profile/ProfileHeader.astro';
 import SkillsList from '@components/profile/SkillsList.astro';
-import ProjectCard from '@components/profile/ProjectCard.astro';
+import FeaturedProjects from '@components/profile/FeaturedProjects.astro';
 import EducationList from '@components/profile/EducationList.astro';
 import ErrorBoundary from '@components/common/ErrorBoundary.astro';
-import Button from '@components/ui/Button.astro';
-import { getProfileData } from '../data/api/profileData';
+import { getProfileDataWithFallback } from '../data/api/profileData';
 import type { Profile } from '@types';
 
-import { getProfileDataWithFallback } from '../data/api/profileData';
-import { getPath } from '@utils/routeUtils';
-import Card from '@components/ui/Card.astro';
-
-// Estado para manejo de errores y carga
-let isLoading = true;
-let error: Error | null = null;
+// Utilizamos el método con fallback para mayor robustez
 let profile: Profile | null = null;
+let error: Error | null = null;
 
 try {
   profile = await getProfileDataWithFallback();
-  isLoading = false;
 } catch (e) {
   error = e instanceof Error ? e : new Error(String(e));
-  isLoading = false;
   console.error('Error al cargar datos del perfil:', error);
 }
-
-// Filtrar proyectos destacados para la página principal
-const featuredProjects = profile?.projects?.filter(project => project.featured) || [];
 ---
 
 <MainLayout 
-  title={profile ? `${profile.basics.name} ${profile.basics.last_name} - ${profile.basics.label}` : 'Portfolio Personal'}
+  title={profile ? `CV - ${profile.basics.name} ${profile.basics.last_name}` : 'Currículum Vitae'} 
+  description={profile?.basics.summary || 'Currículum Vitae profesional'}
   profileData={profile ? { basics: profile.basics } : undefined}
-  showPrintButton={false}
+  showPrintButton={true}
 >
-  {isLoading && (
-    <div class="loading-state">
-      <p>Cargando información del perfil...</p>
-    </div>
-  )}
-
   {error && (
-    <div class="error-state">
+    <div class="error-message">
       <h2>No se pudieron cargar los datos</h2>
       <p>Hubo un problema al obtener la información del perfil. Por favor, intenta nuevamente más tarde.</p>
       {import.meta.env.DEV && <pre>{error.message}</pre>}
@@ -51,98 +36,105 @@ const featuredProjects = profile?.projects?.filter(project => project.featured) 
   )}
 
   {profile && (
-    <div class="portfolio-container">
+    <div class="resume-container">
       <ErrorBoundary>
         <ProfileHeader basics={profile.basics} />
       </ErrorBoundary>
 
-      <div class="portfolio-content">
-        <section class="section">
-          <h2 class="section-header section-header-main">Proyectos Destacados</h2>
-          <Card variant="border" class="projects-container">
-            {featuredProjects.length > 0 ? (
-              featuredProjects.map(project => (
-                <ErrorBoundary>
-                  <ProjectCard project={project} />
-                </ErrorBoundary>
-              ))
-            ) : (
-              <p class="no-content">No hay proyectos destacados disponibles.</p>
-            )}
-          </Card>
-          <div class="view-all">
-            <Button href={getPath('projects')} variant="outline" size="medium">Ver todos los proyectos</Button>
-          </div>
-        </section>
+      <div class="resume-content">
+        <ErrorBoundary>
+          <FeaturedProjects projects={profile.projects} />
+        </ErrorBoundary>
+
+         <ErrorBoundary>
+          <SkillsList skills={profile.skills} />
+        </ErrorBoundary>
         
-        <section class="section">
-          <ErrorBoundary>
-            <SkillsList skills={profile.skills} />
-          </ErrorBoundary>
-        </section>
         
-        <section class="section">
-          <ErrorBoundary>
-            <EducationList education={profile.education} />
-          </ErrorBoundary>
-        </section>
+        <ErrorBoundary>
+          <EducationList education={profile.education} /> 
+        </ErrorBoundary>
       </div>
     </div>
   )}
 </MainLayout>
 
 <style>
-  .loading-state, .error-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 300px;
-    text-align: center;
-  }
-
-  .portfolio-container {
-    font-family: var(--font-family-sans);
+  .resume-container {
+    font-family: var(--font-family-mono);
     max-width: 800px;
     margin: 0 auto;
   }
 
-  .portfolio-content {
+  .resume-content {
     margin-top: var(--space-xl);
   }
 
-  .projects-container {
+  .resume-projects {
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
-  }
-
-  .no-content {
-    text-align: center;
-    color: var(--color-text-light);
-    padding: var(--space-lg);
-    border: 1px dashed var(--color-border);
-    border-radius: var(--radius-md);
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
   }
   
-  .view-all {
-    margin-top: var(--space-lg);
+  /* Estilos específicos para adaptar ProjectCard al CV */
+  .resume-projects :global(.project-title) {
+    font-size: var(--text-md);
+  }
+
+  .resume-projects :global(.external-link-icon) {
+    display: none;
+  }
+
+  .summary {
+    line-height: 1.6;
+  }
+
+  .error-message {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--color-error);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-xl);
     text-align: center;
   }
-
+  
   @media print {
-    .view-all {
-      display: none;
-    }
-
-    .portfolio-container {
+    .resume-container {
+      max-width: none;
       padding: 0;
+      margin: 0;
     }
-  }
 
-  @media (max-width: 900px) {
-    .portfolio-container {
-      padding: 0 var(--space-md);
+    .resume-content {
+      margin-top: var(--space-md);
+    }
+    
+    .resume-projects {
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+    
+    /* Hacemos que las tarjetas de proyecto sean más compactas */
+    .resume-projects :global(.card) {
+      box-shadow: none;
+      border: 1px solid #ddd;
+      padding: var(--space-sm);
+    }
+    
+    :global(.project-card) :global(.project-title) {
+      font-size: 12pt;
+      margin-bottom: 2px;
+    }
+    
+    :global(.project-card) :global(.project-description) {
+      font-size: 10pt;
+      margin-bottom: 4px;
+    }
+    
+    :global(.tag) {
+      font-size: 8pt;
+      padding: 2px 6px;
     }
   }
 </style>

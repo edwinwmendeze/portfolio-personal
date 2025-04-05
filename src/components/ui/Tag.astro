@@ -29,14 +29,14 @@ const {
   }
 
   .tag-default {
-    background-color: rgba(235, 235, 235, 0.8);
+    background-color: var(--color-action-light);
     color: var(--color-text-light);
     border: 1px solid var(--color-border);
   }
 
   .tag-primary {
     background-color: var(--color-primary);
-    color: white;
+    color: var(--color-primary-contrast);
   }
 
   .tag-outline {
@@ -47,11 +47,11 @@ const {
 
   .tag:hover {
     transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-sm);
   }
 
   .tag-default:hover {
-    background-color: #009fa819;
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
     color: var(--color-primary);
   }
 

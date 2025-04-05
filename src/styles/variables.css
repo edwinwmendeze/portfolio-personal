@@ -5,13 +5,20 @@
   --color-primary-dark: #009fa8;
   --color-text: #1f2937;
   --color-text-light: #6b7280;
+  --color-text-muted: #9ca3af;
   --color-background: #ffffff;
   --color-card: #f9fafb;
   --color-border: #e5e7eb;
   --color-error: #ef4444;
   --color-action-light: #eeeeee;
   --color-action-dark: #1e409f;
-
+  --color-social: #1e409f;
+  --color-primary-contrast: #ffffff;
+  --color-error-text: #ef4444;
+  --color-text-muted: #9ca3af;
+  --color-text-featured: #009fa8;
+  --color-text-inverted: #1f2937;   /* Color para texto sobre fondos claros */
+  
   /* Tipografía */
   --font-family-mono: 'Meslo LG', 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
   --font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -25,13 +32,13 @@
   --space-2xl: 3rem;
   
   /* Tamaños de letra */
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-md: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 1.875rem;
+  --text-xs: 0.7rem;
+  --text-sm: 0.8rem;
+  --text-md: 0.95rem;
+  --text-lg: 1.05rem;
+  --text-xl: 1.2rem;
+  --text-2xl: 1.4rem;
+  --text-3xl: 1.7rem;
   
   /* Bordes y sombras */
   --radius-sm: 0.25rem;
@@ -46,17 +53,74 @@
   --transition-normal: 300ms ease-in-out;
 }
 
-/* Tema oscuro (preparado para implementar) */
+/* Tema oscuro */
+:root[data-theme="dark"] {
+  /* Colores base */
+  --color-background: #0f172a;
+  --color-card: #1e293b;
+  --color-border: #334155;
+  
+  /* Texto */
+  --color-text: #f1f5f9;
+  --color-text-light: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-inverted: #f1f5f9;  /* Color para texto sobre fondos oscuros */
+  
+  /* Colores primarios y acentos */
+  --color-primary: #00c4d0;       /* Versión más brillante para modo oscuro */
+  --color-primary-light: #00d7e2;  /* Más brillante que primary */
+  --color-primary-dark: #008f97;   /* Más oscuro que primary */
+  --color-primary-contrast: #0f172a; /* Color de texto sobre fondo primary */
+  
+  /* Colores de acción */
+  --color-action-light: #334155;
+  --color-action-dark: #60a5fa;
+  --color-social: #60a5fa;
+  
+  /* Estado y feedback */
+  --color-error: #ef4444;
+  --color-error-text: #fecaca;
+  --color-text-featured: #00c4d0;
+  
+  /* Sombras - más prominentes en modo oscuro */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* Soporte para preferencia del sistema */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --color-text: #f9fafb;
-    --color-text-light: #d1d5db;
-    --color-background: #111827;
-    --color-card: #1f2937;
-    --color-border: #374151;
-    --color-action-light: #eeeeee;
-    --color-action-dark: #1e409f;
-    --color-social: #1e409f;
-    --color-primary: #009fa8;
+  :root:not([data-theme]) {
+    /* Colores base */
+    --color-background: #0f172a;
+    --color-card: #1e293b;
+    --color-border: #334155;
+    
+    /* Texto */
+    --color-text: #f1f5f9;
+    --color-text-light: #cbd5e1;
+    --color-text-muted: #94a3b8;
+    --color-text-inverted: #f1f5f9;  /* Color para texto sobre fondos oscuros */
+    
+    /* Colores primarios y acentos */
+    --color-primary: #00c4d0;       /* Versión más brillante para modo oscuro */
+    --color-primary-light: #00d7e2;  /* Más brillante que primary */
+    --color-primary-dark: #008f97;   /* Más oscuro que primary */
+    --color-primary-contrast: #0f172a; /* Color de texto sobre fondo primary */
+    
+    /* Colores de acción */
+    --color-action-light: #334155;
+    --color-action-dark: #60a5fa;
+    --color-social: #60a5fa;
+    
+    /* Estado y feedback */
+    --color-error: #ef4444;
+    --color-error-text: #fecaca;
+    --color-text-featured: #00c4d0;
+    
+    /* Sombras - más prominentes en modo oscuro */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
   }
 }
