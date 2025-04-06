@@ -1,10 +1,9 @@
 ---
-// src/pages/resume.astro
+// src/pages/index.astro
 import MainLayout from '@layouts/MainLayout.astro';
 import ProfileHeader from '@components/profile/ProfileHeader.astro';
-import SkillsList from '@components/profile/SkillsList.astro';
 import FeaturedProjects from '@components/profile/FeaturedProjects.astro';
-import EducationList from '@components/profile/EducationList.astro';
+import SkillsList from '@components/profile/SkillsList.astro';
 import ErrorBoundary from '@components/common/ErrorBoundary.astro';
 import { getProfileDataWithFallback } from '../data/api/profileData';
 import type { Profile } from '@types';
@@ -22,10 +21,9 @@ try {
 ---
 
 <MainLayout 
-  title={profile ? `CV - ${profile.basics.name} ${profile.basics.last_name}` : 'Currículum Vitae'} 
-  description={profile?.basics.summary || 'Currículum Vitae profesional'}
+  title={profile ? `${profile.basics.name} ${profile.basics.last_name} - Portfolio Personal` : 'Portfolio Personal'} 
+  description={profile?.basics.summary || 'Portfolio personal'}
   profileData={profile ? { basics: profile.basics } : undefined}
-  showPrintButton={true}
 >
   {error && (
     <div class="error-message">
@@ -36,23 +34,22 @@ try {
   )}
 
   {profile && (
-    <div class="resume-container">
+    <div class="home-container">
       <ErrorBoundary>
         <ProfileHeader basics={profile.basics} />
       </ErrorBoundary>
 
-      <div class="resume-content">
+      <div class="home-content">
         <ErrorBoundary>
-          <FeaturedProjects projects={profile.projects} />
+          <div class="section-container">
+            <FeaturedProjects projects={profile.projects} showTitle={true} />
+          </div>
         </ErrorBoundary>
 
-         <ErrorBoundary>
-          <SkillsList skills={profile.skills} />
-        </ErrorBoundary>
-        
-        
         <ErrorBoundary>
-          <EducationList education={profile.education} /> 
+          <div class="section-container">
+            <SkillsList skills={profile.skills} />
+          </div>
         </ErrorBoundary>
       </div>
     </div>
@@ -60,34 +57,21 @@ try {
 </MainLayout>
 
 <style>
-  .resume-container {
+  .home-container {
     font-family: var(--font-family-mono);
     max-width: 800px;
     margin: 0 auto;
   }
 
-  .resume-content {
+  .home-content {
     margin-top: var(--space-xl);
-  }
-
-  .resume-projects {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
-    margin-bottom: var(--space-lg);
+    gap: var(--space-xl);
   }
   
-  /* Estilos específicos para adaptar ProjectCard al CV */
-  .resume-projects :global(.project-title) {
-    font-size: var(--text-md);
-  }
-
-  .resume-projects :global(.external-link-icon) {
-    display: none;
-  }
-
-  .summary {
-    line-height: 1.6;
+  .section-container {
+    margin-bottom: var(--space-lg);
   }
 
   .error-message {
@@ -99,42 +83,13 @@ try {
     text-align: center;
   }
   
-  @media print {
-    .resume-container {
-      max-width: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .resume-content {
-      margin-top: var(--space-md);
+  @media (max-width: 768px) {
+    .home-content {
+      gap: var(--space-lg);
     }
     
-    .resume-projects {
-      gap: var(--space-sm);
-      margin-bottom: var(--space-sm);
-    }
-    
-    /* Hacemos que las tarjetas de proyecto sean más compactas */
-    .resume-projects :global(.card) {
-      box-shadow: none;
-      border: 1px solid #ddd;
-      padding: var(--space-sm);
-    }
-    
-    :global(.project-card) :global(.project-title) {
-      font-size: 12pt;
-      margin-bottom: 2px;
-    }
-    
-    :global(.project-card) :global(.project-description) {
-      font-size: 10pt;
-      margin-bottom: 4px;
-    }
-    
-    :global(.tag) {
-      font-size: 8pt;
-      padding: 2px 6px;
+    .section-container {
+      margin-bottom: var(--space-md);
     }
   }
 </style>
