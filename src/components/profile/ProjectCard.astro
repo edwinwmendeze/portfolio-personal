@@ -3,6 +3,8 @@
 import type { Project } from '@types';
 import Card from '../ui/Card.astro';
 import Tag from '../ui/Tag.astro';
+// Importar las funciones y mapa de iconos del componente SocialLinks
+import { detectNetworkFromUrl, getIconForUrl } from '../common/SocialLinks.astro';
 
 interface Props {
   project: Project;
@@ -15,6 +17,22 @@ const { project, featured = false, showTitle = true } = Astro.props;
 // Procesamos la URL del proyecto para obtener información adicional
 const projectUrl = project.url ? new URL(project.url) : null;
 const getPath = (url?: string) => url || '#';
+
+// Función para obtener el texto del enlace según la red social
+function getLinkText(url: string): string {
+  if (!url) return '';
+  
+  const networkType = detectNetworkFromUrl(url);
+  
+  switch (networkType) {
+    case 'GitHub':
+      return 'Ver en GitHub';
+    case 'Discord':
+      return 'Unirse al Discord';
+    default:
+      return 'Visitar sitio web';
+  }
+}
 
 ---
 
@@ -32,7 +50,7 @@ const getPath = (url?: string) => url || '#';
         </a>
       </h3>
       
-      {featured && <span class="featured-badge">Destacado</span>}
+      {featured && <Tag text="Destacado" variant="primary" size="small" class="featured-tag" />}
     </div>
   )}
   
@@ -56,11 +74,14 @@ const getPath = (url?: string) => url || '#';
     </div>
   )}
 
-  {projectUrl?.hostname === 'github.com' && (
-    <div class="github-info">
-      <span>Repositorio en GitHub</span>
-    </div>
+  {project.url && (
+    <a href={getPath(project.url)} target="_blank" rel="noopener noreferrer" class="project-link">
+      {/* Usar la función getIconForUrl para obtener el icono adecuado */}
+      <span class="icon" set:html={getIconForUrl(project.url)}></span>
+      <span class="link-text">{getLinkText(project.url)}</span>
+    </a>
   )}
+
 </Card>
 
 <style>
@@ -126,17 +147,53 @@ const getPath = (url?: string) => url || '#';
     flex-wrap: wrap;
     gap: var(--space-xs);
     margin-top: var(--space-md);
+    margin-bottom: var(--space-lg); /* Más espacio debajo de las etiquetas */
   }
   
-  .featured-badge {
-    font-size: var(--text-xs);
-    background-color: var(--color-primary);
-    color: var(--color-text-featured);
-    padding: 2px var(--space-xs);
+  .featured-tag {
+    margin-left: auto;
+  }
+  
+  .project-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
     border-radius: var(--radius-sm);
-    font-weight: 500;
+    background-color: var(--color-background-alt);
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: all var(--transition-fast);
+    width: fit-content;
+    margin-top: var(--space-md); /* Espacio consistente en la parte superior */
   }
   
+  .project-link:hover {
+    background-color: var(--color-primary-transparent);
+    color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+  
+  .link-icon {
+    color: var(--color-text);
+    transition: color var(--transition-fast);
+  }
+  
+  .project-link:hover .link-icon {
+    color: var(--color-primary);
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+  }
+  
+  .project-link:hover .icon {
+    transform: scale(1.1);
+  }
+
   @media (max-width: 768px) {
     .project-title {
       font-size: var(--text-md);
@@ -162,7 +219,7 @@ const getPath = (url?: string) => url || '#';
       margin: var(--space-sm) 0;
     }
     
-    .featured-badge {
+    .featured-tag {
       font-size: 8pt;
     }
   }

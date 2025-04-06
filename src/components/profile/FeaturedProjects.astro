@@ -27,7 +27,7 @@ const hasProjects = featuredProjects.length > 0;
       <Card variant="border" class="projects-container">
         <div class="projects-grid">
           {featuredProjects.map(project => (
-            <ProjectCard project={project} showTitle={false} featured={true} />
+            <ProjectCard project={project} showTitle={true} featured={true} />
           ))}
         </div>
       </Card>

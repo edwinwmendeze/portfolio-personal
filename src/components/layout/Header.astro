@@ -13,6 +13,11 @@ export interface Props {
 
 const { profileData, showPrintButton = false } = Astro.props;
 const basics = profileData?.basics;
+
+// Obtener la ruta actual para determinar que botón mostrar
+const currentPath = Astro.url.pathname;
+const isInCVPage = currentPath.endsWith('/cv') || currentPath.endsWith('/cv/');
+
 ---
 
 <header class="site-header">
@@ -56,13 +61,29 @@ const basics = profileData?.basics;
       {showPrintButton && (
         <Button 
           id="print-btn" 
-          data-print 
+          href={isInCVPage ? undefined : "/portfolio-personal/cv"}
           variant="outline" 
           size="small"
-          ariaLabel="Imprimir CV"
+          ariaLabel={isInCVPage ? "Imprimir CV" : "Ver CV"}
+          data-print={isInCVPage ? "true" : undefined}
+          class="fixed-width-btn"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-          <span class="print-text">Imprimir</span>
+          {isInCVPage ? (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <line x1="10" y1="9" x2="8" y2="9"></line>
+            </svg>
+          )}
+          <span class="print-text">{isInCVPage ? "Imprimir CV" : "Ver CV"}</span>
         </Button>
       )}
     </div>
@@ -107,13 +128,7 @@ const basics = profileData?.basics;
     }
   }
   
-  // Gestión del botón de impresión
-  const printButton = document.getElementById('print-btn');
-  if (printButton) {
-    printButton.addEventListener('click', () => {
-      window.print();
-    });
-  }
+  // El event listener para el botón de impresión ahora se maneja en MainLayout.astro
 </script>
 
 <style>
@@ -281,6 +296,16 @@ const basics = profileData?.basics;
   .theme-toggle.dark-mode .moon-icon {
     opacity: 1;
     transform: translate(-50%, -50%) rotate(0);
+  }
+  
+  /* Botón con ancho fijo para evitar saltos en la UI */
+  .fixed-width-btn {
+    min-width: 110px;
+    justify-content: center;
+  }
+  
+  .print-text {
+    white-space: nowrap;
   }
   
   /* Responsive styles */

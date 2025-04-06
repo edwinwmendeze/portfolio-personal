@@ -7,7 +7,7 @@ import ErrorBoundary from '@components/common/ErrorBoundary.astro';
 const profile = await getProfileDataWithFallback();
 ---
 
-<MainLayout title="Contacto - Edwin Méndez" description="Ponte en contacto conmigo para colaboraciones o proyectos." showPrintButton={false} profileData={{ basics: profile?.basics }}>
+<MainLayout title="Contacto - Edwin Méndez" description="Ponte en contacto conmigo para colaboraciones o proyectos." profileData={{ basics: profile?.basics }}>
   <div class="contact-container">
     <h1>Contacto</h1>
     

@@ -35,7 +35,7 @@ const sortedProjects = profile?.projects?.sort((a, b) => {
   title="Proyectos | Portfolio" 
   description="Todos los proyectos y trabajos realizados"
   profileData={profile ? { basics: profile.basics } : undefined}
-  showPrintButton={false}
+  showPrintButton={true}
 >
   {isLoading && (
     <div class="loading-state">

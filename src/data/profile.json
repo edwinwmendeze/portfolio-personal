@@ -103,10 +103,10 @@
   ],
   "projects": [
     {
-      "name": "Pipeline Automatizado",
+      "name": "Sistema de Automatizacion SUP",
       "description": "Implementación de un sistema CI/CD para automatizar el despliegue de aplicaciones en la nube",
       "highlights": ["Reducción del tiempo de despliegue en un 70%", "Implementación de pruebas automáticas"],
-      "url": "https://github.com/edwin/pipeline",
+      "url": "https://discord.com/edwin/pipeline",
       "featured": true,
       "technologies": ["Jenkins", "Docker", "Kubernetes", "AWS"]
     },
@@ -114,9 +114,17 @@
       "name": "Monitoreo Inteligente",
       "description": "Sistema de monitoreo en tiempo real con alertas predictivas basadas en ML",
       "highlights": ["Detección temprana de incidentes", "Integración con Slack y PagerDuty"],
-      "url": "https://github.com/edwin/monitoring",
+      "url": "https://tecomparto.com",
       "featured": true,
       "technologies": ["Python", "TensorFlow", "Grafana", "Prometheus"]
+    },
+    {
+      "name": "Sistema de Automatizacion SUP",
+      "description": "Implementación de un sistema CI/CD para automatizar el despliegue de aplicaciones en la nube",
+      "highlights": ["Reducción del tiempo de despliegue en un 70%", "Implementación de pruebas automáticas"],
+      "url": "https://github.com/edwin/pipeline",
+      "featured": true,
+      "technologies": ["Jenkins", "Docker", "Kubernetes", "AWS"]
     }
   ]
 }
