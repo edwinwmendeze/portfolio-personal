@@ -113,7 +113,7 @@
   ],
   "projects": [
     {
-      "name": "Sistema de Automatización SUP",
+      "name": "Automatización SUP",
       "description": "Herramienta de automatización de tareas repetitivas desarrollada en Python utilizando pyautogui, diseñada para ejecutar acciones automáticamente desde consola.",
       "highlights": [
         "Automatización de procesos manuales con precisión",

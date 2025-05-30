@@ -362,4 +362,35 @@ const allTechnologies = [...new Set(
       });
     }
   });
+
+  // Script para garantizar que los botones de características destacadas funcionan
+  function initHighlightButtons() {
+    document.querySelectorAll('.highlights-toggle').forEach(button => {
+      // Usar función de flecha para evitar problemas con 'this'
+      button.addEventListener('click', (event) => {
+        const btn = event.currentTarget as HTMLButtonElement;
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', (!expanded).toString());
+        
+        const targetId = btn.getAttribute('aria-controls');
+        if (targetId) {
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.classList.toggle('active');
+            
+            const buttonText = btn.querySelector('span');
+            if (buttonText) {
+              buttonText.textContent = expanded ? 
+                'Características destacadas' : 
+                'Ocultar características';
+            }
+          }
+        }
+      });
+    });
+  }
+
+  // Ejecutar inmediatamente y después de la carga completa
+  initHighlightButtons();
+  window.addEventListener('load', initHighlightButtons);
 </script>

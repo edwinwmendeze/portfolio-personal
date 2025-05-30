@@ -106,6 +106,14 @@ function getTechIcon(tech: string): string {
 
   return techIcons[tech] || '🔧'; // Emoji predeterminado si no se encuentra la tecnología
 }
+
+// Limitar la descripción a un número de caracteres
+const MAX_CHARS = 100;
+const isTruncated = project.description.length > MAX_CHARS;
+const visibleDescription = isTruncated 
+  ? project.description.substring(0, MAX_CHARS) + '...' 
+  : project.description;
+const descriptionId = `desc-${project.name.replace(/\s+/g, '-')}`;
 ---
 
 <div class="project-card" data-featured={featured}>
@@ -136,11 +144,22 @@ function getTechIcon(tech: string): string {
     {showTitle && (
       <h2 class="project-title">{project.name}</h2>
     )}
-    <p class="project-description">{project.description}</p>
+    
+    <div class="description-container">
+      {isTruncated ? (
+        <>
+          <p class="project-description-short">{visibleDescription}</p>
+          <p class="project-description-full">{project.description}</p>
+          <button class="read-more-btn" onclick="toggleDescription(this)">Leer más</button>
+        </>
+      ) : (
+        <p class="project-description">{project.description}</p>
+      )}
+    </div>
     
     {project.highlights && project.highlights.length > 0 && (
       <div class="project-highlights">
-        <button class="highlights-toggle" aria-expanded="false" aria-controls={`highlights-${project.name.replace(/\s+/g, '-')}`}>
+        <button class="highlights-toggle" aria-expanded="false" aria-controls={`highlights-${project.name.replace(/\s+/g, '-')}`} type="button">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="toggle-icon">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
@@ -291,6 +310,7 @@ function getTechIcon(tech: string): string {
     flex-direction: column;
     padding: 1.5rem;
     flex-grow: 1;
+    justify-content: space-between;
   }
 
   .project-title {
@@ -300,31 +320,80 @@ function getTechIcon(tech: string): string {
     color: var(--color-text, #1f2937);
   }
 
-  .project-description {
+  .description-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+    min-height: 5rem;
+  }
+
+  .project-description, 
+  .project-description-short, 
+  .project-description-full {
     font-size: 0.875rem;
     line-height: 1.5;
     color: var(--color-text-light, #6b7280);
-    margin-bottom: 1rem;
-    flex-grow: 1;
+  }
+
+  .project-description-short {
+    display: block;
+  }
+
+  .project-description-full {
+    display: none;
+  }
+
+  .description-container.expanded .project-description-short {
+    display: none;
+  }
+
+  .description-container.expanded .project-description-full {
+    display: block;
+  }
+
+  .read-more-btn {
+    color: var(--color-primary, #3b82f6);
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.75rem;
+    cursor: pointer;
+    text-decoration: underline;
+    display: block;
+    margin-top: 0.5rem;
+  }
+
+  .read-more-btn:hover {
+    color: var(--color-primary-dark, #2563eb);
   }
 
   .project-highlights {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    margin-top: 0.5rem;
   }
 
   .highlights-toggle {
-    background: none;
-    border: none;
+    background-color: var(--color-primary-transparent, rgba(59, 130, 246, 0.1));
+    border: 1px solid var(--color-primary-transparent, rgba(59, 130, 246, 0.2));
+    border-radius: 0.5rem;
     display: flex;
     align-items: center;
+    justify-content: center;
     color: var(--color-primary, #3b82f6);
     cursor: pointer;
-    padding: 0.25rem 0;
+    padding: 0.5rem 1rem;
     font-family: inherit;
     font-size: 0.875rem;
     font-weight: 500;
     width: 100%;
-    text-align: left;
+    text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .highlights-toggle:hover {
+    background-color: var(--color-primary, #3b82f6);
+    color: white;
   }
 
   .toggle-icon {
@@ -342,11 +411,18 @@ function getTechIcon(tech: string): string {
     font-size: 0.875rem;
     color: var(--color-text, #1f2937);
     display: none;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
   }
 
   .highlights-list.active {
     display: block;
-    animation: fadeIn 0.3s ease forwards;
+    max-height: 500px; /* Altura máxima para permitir la animación */
+    opacity: 1;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
   }
 
   .highlights-list li {
@@ -486,32 +562,44 @@ function getTechIcon(tech: string): string {
   }
 </style>
 
-<script>
-  // Activar la funcionalidad de mostrar/ocultar características destacadas
-  document.addEventListener('DOMContentLoaded', () => {
-    const toggleButtons = document.querySelectorAll('.highlights-toggle');
-    
-    toggleButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const expanded = button.getAttribute('aria-expanded') === 'true';
-        button.setAttribute('aria-expanded', (!expanded).toString());
+<script is:inline>
+  function toggleDescription(button) {
+    const container = button.closest('.description-container');
+    container.classList.toggle('expanded');
+    button.textContent = container.classList.contains('expanded') ? 'Leer menos' : 'Leer más';
+  }
+
+  // Script para manejar la funcionalidad de "Características destacadas"
+  document.addEventListener('DOMContentLoaded', function() {
+    const highlightButtons = document.querySelectorAll('.highlights-toggle');
+    highlightButtons.forEach(function(btn) {
+      btn.addEventListener('click', function(event) {
+        event.preventDefault();
         
-        const targetId = button.getAttribute('aria-controls');
+        const targetId = this.getAttribute('aria-controls');
         if (targetId) {
           const targetElement = document.getElementById(targetId);
           if (targetElement) {
             targetElement.classList.toggle('active');
             
-            // Cambiar el texto del botón
-            const buttonText = button.querySelector('span');
+            const expanded = targetElement.classList.contains('active');
+            this.setAttribute('aria-expanded', expanded.toString());
+            
+            const buttonText = this.querySelector('span');
             if (buttonText) {
               buttonText.textContent = expanded ? 
-                'Características destacadas' : 
-                'Ocultar características';
+                'Ocultar características' : 
+                'Características destacadas';
             }
           }
         }
       });
     });
+  });
+
+  // También manejar los eventos de Astro para navegación
+  document.addEventListener('astro:page-load', function() {
+    const event = new Event('DOMContentLoaded');
+    document.dispatchEvent(event);
   });
 </script>
