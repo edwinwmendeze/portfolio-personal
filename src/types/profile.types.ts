@@ -1,6 +1,6 @@
 // Tipos para información básica
 export interface Image {
-  local: string;
+  local?: string;
   remote: string;
 }
 
@@ -19,7 +19,7 @@ export interface SocialProfile {
 export interface Basics {
   name: string;
   last_name: string;
-  label: string;
+  occupation: string;
   image: Image;
   email: string;
   phone: string;

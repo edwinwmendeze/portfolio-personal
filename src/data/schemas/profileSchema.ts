@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 // Esquema para validar la estructura de los datos del perfil
 const imageSourceSchema = z.object({
-  local: z.string(),
-  remote: z.string()
+  remote: z.string(),
+  local: z.string().optional()
 });
 
 const locationSchema = z.object({
@@ -21,7 +21,7 @@ const profileSchema = z.object({
 const basicsSchema = z.object({
   name: z.string(),
   last_name: z.string(),
-  label: z.string(),
+  occupation: z.string(),
   image: imageSourceSchema,
   email: z.string().email(),
   phone: z.string(),

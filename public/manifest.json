@@ -1,0 +1,43 @@
+{
+  "name": "Portfolio de Edwin Wilson Méndez",
+  "short_name": "Edwin Portfolio",
+  "description": "Portfolio profesional de Edwin Wilson Méndez - Analista de datos y desarrollador",
+  "start_url": "/portfolio-personal/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/portfolio-personal/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/portfolio-personal/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "portrait",
+  "lang": "es-ES",
+  "dir": "ltr",
+  "categories": ["portfolio", "professional", "development"],
+  "screenshots": [
+    {
+      "src": "/portfolio-personal/screenshot-desktop.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "platform": "wide",
+      "label": "Pantalla principal del portfolio - Escritorio"
+    },
+    {
+      "src": "/portfolio-personal/screenshot-mobile.jpg",
+      "sizes": "640x1136",
+      "type": "image/jpeg",
+      "platform": "narrow",
+      "label": "Pantalla principal del portfolio - Móvil"
+    }
+  ]
+} 

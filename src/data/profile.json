@@ -8,39 +8,34 @@
   "basics": {
     "name": "Edwin Wilson",
     "last_name": "Méndez Echevarría",
-    "occupation": "Analista de datos con experiencia en Python y automatización.",
+    "occupation": "Analista de datos con experiencia en Python y automatización de procesos.",
     "image": {
       "remote": "https://github.com/edwinwmendeze.png"
     },
-    "email": "45088035@continental.edu.pe",
+    "email": "edwinwmendez@gmail.com",
     "phone": "(51) 948-924-822",
     "url": "https://edwinwmendeze.github.io/portfolio-personal/",
-    "summary": "",  
+    "summary": "Desarrollador backend con experiencia en Python y automatización de procesos. Enfocado en despliegues eficientes, soluciones escalables y mejora continua.",
     "location": {
       "city": "Atalaya",
-      "region": "Ucayali",
-      "countryCode": "PE"
+      "countryCode": "PE",
+      "region": "Ucayali"
     },
     "profiles": [
       {
         "network": "GitHub",
-        "username": "edwin",
-        "url": "https://github.com/edwinwmendeze"
+        "username": "edwinwmendez",
+        "url": "https://github.com/edwinwmendez"
       },
       {
         "network": "LinkedIn",
-        "username": "edwinmendez",
+        "username": "edwinwmendez",
         "url": "https://linkedin.com/in/edwinwmendez"
       },
       {
         "network": "Facebook",
         "username": "edwinwmendez",
-        "url": "https://facebook/edwinwmendez"
-      },
-      {
-        "network": "Pruebaaaaa",
-        "username": "aaa",
-        "url": "https://facebook/edwinwmendez"
+        "url": "https://facebook.com/edwinwmendez"
       }
     ]
   },
@@ -125,7 +120,7 @@
         "Interacción con interfaces gráficas mediante control de mouse y teclado",
         "Facilidad de ejecución desde consola sin interfaz adicional"
       ],
-      "url": "https://discord.com/channels/1212350323604201502/1212357244063186955/1214221343319662592",
+      "url": "https://github.com/edwinwmendeze/automatizacion-sup",
       "featured": true,
       "technologies": [
         "Python",

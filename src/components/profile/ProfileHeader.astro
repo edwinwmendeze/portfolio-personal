@@ -27,7 +27,7 @@ const location = [
     <div class="container">
       <div class="avatar-container">
         <img 
-          src={basics.image.remote || basics.image.local || '/images/placeholder.png'} 
+          src={basics.image.remote} 
           alt={`Fotografía de ${fullName}`} 
           class="avatar"
           width="150"
@@ -37,7 +37,7 @@ const location = [
       </div>
       <div class="info-container">
         <h1>{fullName}</h1>
-        <p class="role">{basics.label}</p>
+        <p class="role">{basics.occupation}</p>
         
         <div class="contact-info">
           {basics.email && (

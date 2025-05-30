@@ -34,7 +34,7 @@ const profile = await getProfileDataWithFallback() as ExtendedProfile;
     <div class="cv-header">
       <div class="profile-info">
         <h1>{profile?.basics?.name} {profile?.basics?.last_name}</h1>
-        <p class="headline">{profile?.basics?.label}</p>
+        <p class="headline">{profile?.basics?.occupation}</p>
         
         <div class="contact-details">
           {profile?.basics?.email && (
