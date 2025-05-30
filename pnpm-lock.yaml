@@ -8,19 +8,12 @@ importers:
 
   .:
     dependencies:
-      '@iconify-json/devicon':
-        specifier: ^1.2.24
-        version: 1.2.24
       astro:
         specifier: ^5.6.0
         version: 5.8.1(@types/node@22.15.29)(rollup@4.41.1)(typescript@5.8.3)
       zod:
         specifier: ^3.24.2
         version: 3.25.42
-    devDependencies:
-      '@iconify-json/carbon':
-        specifier: ^1.2.8
-        version: 1.2.8
 
 packages:
 
@@ -213,15 +206,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
-
-  '@iconify-json/carbon@1.2.8':
-    resolution: {integrity: sha512-6xh4YiFBz6qoSnB3XMe23WvjTJroDFXB17J1MbiT7nATFe+70+em1acRXr8hgP/gYpwFMHFc4IvjA/IPTPnTzg==}
-
-  '@iconify-json/devicon@1.2.24':
-    resolution: {integrity: sha512-Y46dfXckSh04IWeV8hB/7IOkbq6H+oV+wCapz5PDx2Z4aXqGx6Fm5ZcKP9Jt9YiEhqN02Hehl4cni3Vp+xfheg==}
-
-  '@iconify/types@2.0.0':
-    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -1612,16 +1596,6 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.5':
     optional: true
-
-  '@iconify-json/carbon@1.2.8':
-    dependencies:
-      '@iconify/types': 2.0.0
-
-  '@iconify-json/devicon@1.2.24':
-    dependencies:
-      '@iconify/types': 2.0.0
-
-  '@iconify/types@2.0.0': {}
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:

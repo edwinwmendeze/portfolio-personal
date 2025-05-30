@@ -9,11 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@iconify-json/devicon": "^1.2.24",
     "astro": "^5.6.0",
     "zod": "^3.24.2"
-  },
-  "devDependencies": {
-    "@iconify-json/carbon": "^1.2.8"
   }
 }

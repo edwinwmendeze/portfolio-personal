@@ -1,6 +1,7 @@
 ---
 import type { Project } from '@types';
 import Tag from '../ui/Tag.astro';
+import Icons from '../common/Icons.astro';
 
 interface Props {
   project: Project;
@@ -22,35 +23,45 @@ const projectImageSvg = `/portfolio-personal/images/projects/${project.name.toLo
 const defaultImage = `/portfolio-personal/images/project-placeholder.svg`;
 
 // Función para obtener el ícono adecuado según la tecnología
+function getTechIconComponent(tech: string): "vercel" |"astro" | "vue" | "nuxt" | "react" | "typescript" | "javascript" | "node" | "python" | "mongodb" | "firebase" | "supabase" | "tailwind" | "docker" | "git" | "github" | null {
+  const techIconMap: Record<string, "vercel" |"astro" | "vue" | "nuxt" | "react" | "typescript" | "javascript" | "node" | "python" | "mongodb" | "firebase" | "supabase" | "tailwind" | "docker" | "git" | "github"> = {
+    'Python': 'python',
+    'Vue.js': 'vue',
+    'Vue 3': 'vue',
+    'Nuxt 3': 'nuxt',
+    'Nuxt.js': 'nuxt',
+    'Vercel': 'vercel',
+    'React': 'react',
+    'TypeScript': 'typescript',
+    'JavaScript': 'javascript',
+    'Node.js': 'node',
+    'Node': 'node',
+    'MongoDB': 'mongodb',
+    'Firebase': 'firebase',
+    'Supabase': 'supabase',
+    'Docker': 'docker',
+    'GitHub': 'github',
+    'Git': 'git',
+    'Tailwind': 'tailwind',
+    'Tailwind CSS': 'tailwind',
+    'Astro': 'astro'
+  };
+
+  return techIconMap[tech] || null;
+}
+
+// Función para obtener el ícono emoji para las tecnologías sin ícono en el componente
 function getTechIcon(tech: string): string {
   const techIcons: Record<string, string> = {
-    'Python': '🐍',
-    'Vue.js': '🟢',
-    'Vue': '🟢',
-    'Nuxt': '🟢',
-    'Nuxt.js': '🟢',
-    'React': '⚛️',
-    'TypeScript': '🔷',
-    'JavaScript': '🟨',
-    'Node.js': '🟩',
-    'Node': '🟩',
     'Electron': '🔷',
-    'MongoDB': '🍃',
-    'Firebase': '🔥',
-    'Supabase': '⚡',
-    'Docker': '🐳',
     'AWS': '☁️',
     'GCP': '☁️',
     'Google Cloud': '☁️',
     'Azure': '☁️',
     'Vercel': '▲',
-    'GitHub': '🐙',
-    'Git': '🔄',
     'HTML': '🌐',
     'CSS': '🎨',
     'SASS': '💅',
-    'Tailwind': '🌊',
-    'Tailwind CSS': '🌊',
     'Bootstrap': '🅱️',
     'Django': '🦄',
     'Flask': '🧪',
@@ -88,7 +99,6 @@ function getTechIcon(tech: string): string {
     'WebGL': '🎮',
     'Three.js': '🎲',
     'D3.js': '📊',
-    'Astro': '🚀',
     'Vite': '⚡',
     'Webpack': '📦',
     'Rollup': '🔄',
@@ -175,22 +185,31 @@ const descriptionId = `desc-${project.name.replace(/\s+/g, '-')}`;
     )}
     
     <div class="tech-tags">
-      {project.technologies && project.technologies.map((tech: string, index: number) => (
-        index < 4 ? 
+      {project.technologies && project.technologies.map((tech: string, index: number) => {
+        const iconName = getTechIconComponent(tech);
+        return index < 5 ? (
           <span class="tech-tag" title={tech}>
-            <span class="tech-icon">{getTechIcon(tech)}</span>
-            <span class="tech-name">{tech}</span>
-          </span> : null
-      ))}
-      {project.technologies && project.technologies.length > 4 && (
-        <span class="tech-tag more-tag">+{project.technologies.length - 4}</span>
+            {iconName ? (
+              <span class="tech-icon-circle">
+                <Icons name={iconName} size={16} class="tech-icon-svg" />
+              </span>
+            ) : (
+              <span class="tech-icon-circle">
+                <span class="tech-emoji">{getTechIcon(tech)}</span>
+              </span>
+            )}
+          </span>
+        ) : null;
+      })}
+      {project.technologies && project.technologies.length > 5 && (
+        <span class="tech-tag more-tag">+{project.technologies.length - 5}</span>
       )}
     </div>
     
     <div class="project-links">
       {githubUrl && (
         <a href={githubUrl} class="project-link github-link" target="_blank" rel="noopener noreferrer">
-          <span class="github-icon"></span>
+          <Icons name="github" size={16} class="link-icon" />
           <span>GitHub</span>
         </a>
       )}
@@ -449,35 +468,58 @@ const descriptionId = `desc-${project.name.replace(/\s+/g, '-')}`;
   .tech-tag {
     display: flex;
     align-items: center;
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    background-color: var(--color-background-alt, #f3f4f6);
+    justify-content: center;
+    padding: 0;
+    background-color: transparent;
     color: var(--color-text, #1f2937);
-    border: 1px solid var(--color-border, #e5e7eb);
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    border: none;
+    transition: transform 0.2s ease;
   }
 
-  .tech-icon {
-    margin-right: 0.375rem;
-    font-size: 0.875rem;
+  .tech-icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .tech-tag:hover {
-    background-color: var(--color-primary, #3b82f6);
-    color: #ffffff;
-    border-color: var(--color-primary, #3b82f6);
+  .tech-icon-svg {
+    color: currentColor;
+  }
+
+  .tech-emoji {
+    font-size: 1rem;
+  }
+
+  .tech-tag:hover .tech-icon-circle {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 
   .more-tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
     background-color: var(--color-primary-transparent, rgba(59, 130, 246, 0.1));
     color: var(--color-primary, #3b82f6);
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: transform 0.2s ease, background-color 0.2s ease;
   }
 
   .more-tag:hover {
     background-color: var(--color-primary, #3b82f6);
     color: white;
+    transform: scale(1.1);
   }
 
   .project-links {
@@ -501,12 +543,14 @@ const descriptionId = `desc-${project.name.replace(/\s+/g, '-')}`;
   }
 
   .project-link svg,
+  .link-icon,
   .github-icon {
     margin-right: 0.375rem;
     transition: transform 0.2s ease;
   }
 
   .project-link:hover svg,
+  .project-link:hover .link-icon,
   .project-link:hover .github-icon {
     transform: scale(1.1);
   }
