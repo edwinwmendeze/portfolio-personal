@@ -129,9 +129,7 @@
       "featured": true,
       "technologies": [
         "Python",
-        "pyautogui",
-        "time",
-        "subprocess"
+        "pyautogui"
       ]
     },
     {
