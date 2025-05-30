@@ -22,10 +22,10 @@ export const iconMap: Record<string, string> = {
 // Función para detectar la red social a partir de una URL
 export function detectNetworkFromUrl(url: string): string {
   if (!url) return 'Web';
-  
+
   try {
     const hostname = new URL(url).hostname.toLowerCase();
-    
+
     if (hostname.includes('github.com')) return 'GitHub';
     if (hostname.includes('linkedin.com')) return 'LinkedIn';
     if (hostname.includes('discord.com') || hostname.includes('discord.gg')) return 'Discord';
@@ -33,7 +33,7 @@ export function detectNetworkFromUrl(url: string): string {
     if (hostname.includes('facebook.com') || hostname.includes('fb.com')) return 'Facebook';
     if (hostname.includes('instagram.com')) return 'Instagram';
     if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) return 'YouTube';
-    
+
     return 'Web';
   } catch (e) {
     return 'Web';
@@ -51,9 +51,9 @@ export function getIconForUrl(url: string): string {
 <ul class:list={['social-links', `social-links-${variant}`, className]}>
   {profiles.map((profile) => (
     <li>
-      <a 
-        href={profile.url} 
-        target="_blank" 
+      <a
+        href={profile.url}
+        target="_blank"
         rel="noopener noreferrer"
         aria-label={`Perfil de ${profile.network}`}
         title={profile.network}
@@ -74,7 +74,7 @@ export function getIconForUrl(url: string): string {
     padding: 0;
     margin: var(--space-md) 0;
   }
-  
+
   .social-links a {
     display: flex;
     align-items: center;
@@ -83,47 +83,47 @@ export function getIconForUrl(url: string): string {
     color: var(--color-primary);
     transition: color var(--transition-fast);
   }
-  
+
   .social-links a:hover {
     color: var(--color-primary-dark);
   }
-  
+
   .social-icon {
     transition: transform 0.2s ease;
   }
-  
+
   .social-links a:hover .social-icon {
     transform: scale(1.1);
   }
-  
+
   .print-only {
     display: none;
   }
-  
+
   @media (max-width: 640px) {
     .network-name {
       display: none;
     }
   }
-  
+
   @media print {
     .social-links {
       display: block;
       margin: var(--space-sm) 0;
     }
-    
+
     .social-links li {
       margin-bottom: var(--space-xs);
     }
-    
+
     .icon-only {
       display: none;
     }
-    
+
     .print-only {
       display: inline;
     }
-    
+
     .network-name {
       display: none;
     }

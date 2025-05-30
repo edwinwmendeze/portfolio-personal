@@ -4,9 +4,11 @@ export default defineConfig({
   site: 'https://edwinwmendeze.github.io',
   base: '/portfolio-personal',
   output: 'static',
+
   build: {
     assets: '_assets'
   },
+
   vite: {
     ssr: {
       // Soluciona problemas con módulos que dependen de APIs de navegador
@@ -18,5 +20,5 @@ export default defineConfig({
       minify: 'esbuild',
       assetsInlineLimit: 4096
     }
-  }
+  },
 });

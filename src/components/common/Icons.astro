@@ -1,0 +1,43 @@
+---
+interface Props {
+  name: 'astro' | 'vue' | 'nuxt';
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 32, class: className = '' } = Astro.props;
+---
+
+{(() => {
+  switch (name) {
+    case 'astro':
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 32 32" class={className}>
+          <path fill="url(#vscodeIconsFileTypeLightAstro0)" d="M11.025 20.499c-.532 1.75-.154 4.184 1.105 5.331v-.042l.042-.112c.154-.741.756-1.203 1.526-1.175c.713.014 1.12.392 1.217 1.217c.042.308.042.616.056.938v.098c0 .7.196 1.371.588 1.959c.35.56.84.993 1.497 1.287l-.028-.056l-.028-.112c-.49-1.469-.14-2.49 1.147-3.358l.392-.266l.868-.573a4.25 4.25 0 0 0 1.791-3.037c.07-.532 0-1.05-.154-1.553l-.21.14c-1.945 1.035-4.17 1.4-6.325.98c-1.301-.197-2.56-.56-3.498-1.652z"/>
+          <path fill="#17191e" d="M4.925 20.191s3.736-1.82 7.486-1.82l2.84-8.759c.098-.42.406-.7.756-.7s.644.28.756.714l2.826 8.746c4.45 0 7.487 1.82 7.487 1.82L20.709 2.84c-.168-.518-.49-.84-.896-.84h-7.612c-.406 0-.7.322-.896.84z"/>
+          <defs>
+            <linearGradient id="vscodeIconsFileTypeLightAstro0" x1="8.19" x2="16.91" y1="23" y2="18.89" gradientTransform="translate(-.673 -2.198)scale(1.3993)" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#d83333"/>
+              <stop offset="1" stop-color="#f041ff"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      );
+    case 'vue':
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 128 128" class={className}>
+          <path fill="none" d="m0 8.934l49.854.158l14.167 24.47l14.432-24.47L128 8.935l-63.834 110.14zm126.98.637l-24.36.02l-38.476 66.053L25.691 9.592L.942 9.572l63.211 107.89zm-25.149-.008l-22.745.168l-15.053 24.647L49.216 9.73l-22.794-.168l37.731 64.476zm-75.834-.17l23.002.009m-23.002-.01l23.002.01"/>
+          <path fill="#35495e" d="m25.997 9.393l23.002.009L64.035 34.36L79.018 9.404L102 9.398L64.15 75.053z"/>
+          <path fill="#41b883" d="m.91 9.569l25.067-.172l38.15 65.659L101.98 9.401l25.11.026l-62.966 108.06z"/>
+        </svg>
+      );
+    case 'nuxt':
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 32 32" class={className}>
+          <path fill="#00e676" d="m30.27 23l-6.93-12a1.98 1.98 0 0 0-1.73-1a1.96 1.96 0 0 0-1.73 1l-2.27 3.93l-3.88-6.71a1.996 1.996 0 0 0-3.46 0L1.73 23a2 2 0 0 0 1.73 3h8.915a6 6 0 0 0 5.197-3.001L21.61 16l3.46 6h-2.31l-2.31 4h8.09a2 2 0 0 0 1.73-3m-17.896-1H6.93L12 13.22l3.3 5.71l-1.193 2.069A2 2 0 0 1 12.374 22"/>
+        </svg>
+      );
+    default:
+      return null;
+  }
+})()}
