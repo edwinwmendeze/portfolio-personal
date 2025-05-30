@@ -4,7 +4,7 @@ import { profileDataSchema } from '../schemas/profileSchema';
 // Importar datos locales para modo offline
 import localProfileData from '../profile.json';
 
-const PROFILE_URL = 'https://raw.githubusercontent.com/edwinwmendeze/nrc-23731/refs/heads/main/grupo-a/src/data/profiles/EdwinMendez.json';
+const PROFILE_URL = 'https://raw.githubusercontent.com/edwinwmendeze/portfolio-personal/refs/heads/main/src/data/profile.json';
 
 const TIMEOUT_MS = 8000; // 8 segundos
 
