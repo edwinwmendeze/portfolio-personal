@@ -1,5 +1,4 @@
 ---
-// src/components/profile/ProjectCard.astro
 import type { Project } from '@types';
 import Tag from '../ui/Tag.astro';
 
@@ -9,7 +8,7 @@ interface Props {
   showTitle?: boolean;
 }
 
-const { project, featured = false } = Astro.props;
+const { project, featured = false, showTitle = true } = Astro.props;
 
 // Determinar el estado del proyecto (Destacado, Nuevo, etc.)
 const status = featured ? "Destacado" : "Proyecto";
@@ -17,11 +16,9 @@ const status = featured ? "Destacado" : "Proyecto";
 // Procesar la URL del proyecto para los diferentes enlaces
 const githubUrl = project.url && project.url.includes('github.com') ? project.url : null;
 const webUrl = project.url && !project.url.includes('github.com') ? project.url : null;
-const detailsUrl = "#"; // En el futuro podría ser una página detallada del proyecto
 
 // Generar URL para la imagen basada en el nombre del proyecto
 const projectImageSvg = `/portfolio-personal/images/projects/${project.name.toLowerCase().replace(/\s+/g, '-')}.svg`;
-const projectImageJpg = `/portfolio-personal/images/projects/${project.name.toLowerCase().replace(/\s+/g, '-')}.jpg`;
 const defaultImage = `/portfolio-personal/images/project-placeholder.svg`;
 
 // Función para obtener el ícono adecuado según la tecnología
@@ -134,9 +131,11 @@ function getTechIcon(tech: string): string {
       <span class="project-tag">{status}</span>
     </div>
   </div>
-  
+
   <div class="project-content">
-    <h2 class="project-title">{project.name}</h2>
+    {showTitle && (
+      <h2 class="project-title">{project.name}</h2>
+    )}
     <p class="project-description">{project.description}</p>
     
     {project.highlights && project.highlights.length > 0 && (
@@ -149,7 +148,7 @@ function getTechIcon(tech: string): string {
         </button>
         
         <ul id={`highlights-${project.name.replace(/\s+/g, '-')}`} class="highlights-list">
-          {project.highlights.map((highlight: string) => (
+          {project.highlights.map((highlight) => (
             <li>{highlight}</li>
           ))}
         </ul>
