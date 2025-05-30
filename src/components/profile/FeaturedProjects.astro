@@ -1,69 +1,258 @@
 ---
 // src/components/profile/FeaturedProjects.astro
-import type { Project } from '@types';
 import ProjectCard from './ProjectCard.astro';
-import ErrorBoundary from '../common/ErrorBoundary.astro';
-import Card from '../ui/Card.astro';
+import type { Project } from '@types';
 
 interface Props {
   projects: Project[];
+  maxProjects?: number;
   showTitle?: boolean;
 }
 
-const { projects, showTitle = true } = Astro.props;
+const { projects, maxProjects = 6, showTitle = true } = Astro.props;
 
-// Filtrar los proyectos destacados
-const featuredProjects = projects.filter(p => p.featured);
-const hasProjects = featuredProjects.length > 0;
+// Filtrar proyectos destacados primero
+const featuredProjects = projects
+  .filter(project => project.featured)
+  .slice(0, maxProjects);
+
+// Si no hay suficientes proyectos destacados, agregar proyectos regulares
+const regularProjects = projects
+  .filter(project => !project.featured)
+  .slice(0, maxProjects - featuredProjects.length);
+
+// Combinar ambos arrays
+const displayProjects = [...featuredProjects, ...regularProjects];
+
+// Extraer todas las tecnologías únicas de los proyectos
+const allTechnologies = [...new Set(
+  displayProjects
+    .flatMap(project => project.technologies || [])
+    .filter(Boolean)
+)].sort();
 ---
 
-<ErrorBoundary>
-  <div class="featured-projects">
-    {showTitle && <h2 class="component-title">Proyectos Destacados</h2>}
-    
-    {!hasProjects && <p class="no-projects">No hay proyectos destacados disponibles.</p>}
-    
-    {hasProjects && (
-      <Card variant="border" class="projects-container">
-        <div class="projects-grid">
-          {featuredProjects.map(project => (
-            <ProjectCard project={project} showTitle={true} featured={true} />
-          ))}
-        </div>
-      </Card>
+<section class="featured-projects-section">
+  {showTitle && (
+    <header class="section-header">
+      <h2 class="section-title">Proyectos Destacados</h2>
+      <p class="section-subtitle">Una selección de mis trabajos más relevantes</p>
+    </header>
+  )}
+
+  <div class="filters-container">
+    <div class="filter-group">
+      <label for="tech-filter">Filtrar por Tecnología:</label>
+      <select id="tech-filter" class="filter-select">
+        <option value="">Todas las tecnologías</option>
+        {allTechnologies.map(tech => (
+          <option value={tech}>{tech}</option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  <div id="projects-grid" class="projects-grid">
+    {displayProjects.length > 0 ? (
+      displayProjects.map(project => (
+        <ProjectCard project={project} featured={project.featured} />
+      ))
+    ) : (
+      <p class="no-projects">No hay proyectos disponibles</p>
     )}
   </div>
-</ErrorBoundary>
+
+  {projects.length > maxProjects && (
+    <div class="view-more-container">
+      <a href="/portfolio-personal/projects" class="view-more-link">
+        Ver todos los proyectos
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  )}
+</section>
 
 <style>
-  .featured-projects {
+  .featured-projects-section {
+    width: 100%;
     margin-bottom: var(--space-xl);
+    font-family: var(--font-family-mono);
   }
   
-  .no-projects {
-    color: var(--color-text-secondary);
-    font-style: italic;
+  .section-header {
+    margin-bottom: var(--space-lg);
+    text-align: center;
+  }
+  
+  .section-title {
+    font-size: var(--text-2xl);
+    color: var(--color-heading);
+    margin-bottom: var(--space-xs);
+    position: relative;
+    display: inline-block;
+  }
+  
+  .section-title::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--color-primary);
+    border-radius: 3px;
+  }
+  
+  .section-subtitle {
+    color: var(--color-text-light);
+    font-size: var(--text-md);
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: var(--space-sm);
+  }
+
+  .filters-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--space-md);
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 250px;
+  }
+
+  .filter-group label {
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+  }
+
+  .filter-select {
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-background-alt);
+    color: var(--color-text);
+    font-family: var(--font-family-mono);
+    font-size: var(--text-sm);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+  }
+
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
   }
   
   .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: var(--space-lg);
+  }
+  
+  .no-projects {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--color-text-muted);
+    background-color: var(--color-background-alt);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--color-border);
+  }
+  
+  .view-more-container {
+    margin-top: var(--space-xl);
     display: flex;
-    flex-direction: column;
-    gap: var(--space-xl);
+    justify-content: center;
   }
   
-  @media print {
-    .featured-projects {
-      margin-bottom: var(--space-md);
-    }
-    
+  .view-more-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-primary-transparent);
+    background-color: var(--color-primary-transparent);
+  }
+  
+  .view-more-link:hover {
+    background-color: var(--color-primary);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  }
+  
+  .view-more-link svg {
+    transition: transform 0.2s ease;
+  }
+  
+  .view-more-link:hover svg {
+    transform: translateX(4px);
+  }
+  
+  @media (min-width: 640px) {
     .projects-grid {
-      gap: var(--space-sm);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
   
-  @media (max-width: 768px) {
+  @media (min-width: 1024px) {
     .projects-grid {
-      gap: var(--space-lg);
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .filters-container {
+      justify-content: stretch;
+    }
+
+    .filter-group {
+      width: 100%;
     }
   }
 </style>
+
+<script>
+  // Filtrado de proyectos por tecnología
+  document.addEventListener('DOMContentLoaded', () => {
+    const techFilter = document.getElementById('tech-filter') as HTMLSelectElement;
+    const projectCards = Array.from(document.querySelectorAll('.project-card'));
+    
+    if (techFilter) {
+      techFilter.addEventListener('change', () => {
+        const selectedTech = techFilter.value.toLowerCase();
+        
+        projectCards.forEach(card => {
+          const techTags = Array.from(card.querySelectorAll('.tech-tag')).map(tag => {
+            // Manejar el acceso a title o textContent con seguridad de tipos
+            const title = tag.getAttribute('title');
+            const text = tag.textContent || '';
+            return (title || text).toLowerCase();
+          });
+          
+          if (selectedTech === '' || techTags.includes(selectedTech)) {
+            (card as HTMLElement).style.display = 'flex';
+          } else {
+            (card as HTMLElement).style.display = 'none';
+          }
+        });
+      });
+    }
+  });
+</script>

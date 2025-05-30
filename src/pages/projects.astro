@@ -29,6 +29,16 @@ const sortedProjects = profile?.projects?.sort((a, b) => {
   // Si ambos tienen el mismo estado de destacado, ordenar alfabéticamente por nombre
   return a.name.localeCompare(b.name);
 }) || [];
+
+// Extraer todas las tecnologías únicas de los proyectos
+const allTechnologies = [...new Set(
+  sortedProjects
+    .flatMap(project => project.technologies || [])
+    .filter(Boolean)
+)].sort();
+
+// Ya que 'category' no es parte del tipo Project actual, omitimos esta parte
+// En su lugar, podríamos usar otro campo disponible o añadir category al tipo Project en el futuro
 ---
 
 <MainLayout 
@@ -55,18 +65,41 @@ const sortedProjects = profile?.projects?.sort((a, b) => {
     <div class="projects-page-container">
       <h1 class="page-title">Proyectos</h1>
       
-      <div class="projects-filters">
-        <p class="projects-count">
-          <span class="highlight">{sortedProjects.length}</span> proyectos en total
-          {sortedProjects.filter(p => p.featured).length > 0 && (
-            <span class="featured-count">
-              (<span class="highlight">{sortedProjects.filter(p => p.featured).length}</span> destacados)
-            </span>
-          )}
-        </p>
+      <div class="filters-container">
+        <div class="projects-count">
+          <p>
+            <span class="highlight">{sortedProjects.length}</span> proyectos en total
+            {sortedProjects.filter(p => p.featured).length > 0 && (
+              <span class="featured-count">
+                (<span class="highlight">{sortedProjects.filter(p => p.featured).length}</span> destacados)
+              </span>
+            )}
+          </p>
+        </div>
+        
+        <div class="filters">
+          <div class="filter-group">
+            <label for="tech-filter">Tecnología:</label>
+            <select id="tech-filter" class="filter-select">
+              <option value="">Todas las tecnologías</option>
+              {allTechnologies.map(tech => (
+                <option value={tech}>{tech}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="status-filter">Estado:</label>
+            <select id="status-filter" class="filter-select">
+              <option value="">Todos</option>
+              <option value="Destacado">Destacados</option>
+              <option value="Proyecto">Regulares</option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      <div class="projects-grid">
+      <div id="projects-grid" class="projects-grid">
         {sortedProjects.length > 0 ? (
           sortedProjects.map(project => (
             <ErrorBoundary>
@@ -79,6 +112,11 @@ const sortedProjects = profile?.projects?.sort((a, b) => {
         ) : (
           <p class="no-content">No hay proyectos disponibles.</p>
         )}
+      </div>
+      
+      <div id="no-results" class="no-results hidden">
+        <p>No se encontraron proyectos con los filtros seleccionados.</p>
+        <button id="reset-filters" class="reset-button">Restablecer filtros</button>
       </div>
     </div>
   )}
@@ -111,9 +149,8 @@ const sortedProjects = profile?.projects?.sort((a, b) => {
   }
 
   .projects-page-container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: var(--space-xl) var(--space-md);
   }
 
   .page-title {
@@ -124,16 +161,14 @@ const sortedProjects = profile?.projects?.sort((a, b) => {
     padding-bottom: var(--space-xs);
   }
 
-  .projects-filters {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .filters-container {
     margin-bottom: var(--space-xl);
   }
 
   .projects-count {
     color: var(--color-text-secondary);
     font-size: var(--text-sm);
+    margin-bottom: var(--space-md);
   }
 
   .highlight {
@@ -144,6 +179,46 @@ const sortedProjects = profile?.projects?.sort((a, b) => {
   .featured-count {
     margin-left: var(--space-xs);
   }
+  
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+  
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 150px;
+  }
+  
+  .filter-group label {
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+  }
+  
+  .filter-select {
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-background-alt);
+    color: var(--color-text);
+    font-family: var(--font-family-mono);
+    font-size: var(--text-sm);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+  }
+  
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
 
   .projects-grid {
     display: grid;
@@ -151,28 +226,140 @@ const sortedProjects = profile?.projects?.sort((a, b) => {
     gap: var(--space-lg);
   }
 
-  .no-content {
-    color: var(--color-text-muted);
-    font-style: italic;
+  .no-content, .no-results {
+    grid-column: 1 / -1;
     text-align: center;
-    padding: var(--space-xl) 0;
+    padding: var(--space-xl);
+    color: var(--color-text-muted);
+    background-color: var(--color-background-alt);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--color-border);
+    margin: var(--space-lg) 0;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .reset-button {
+    margin-top: var(--space-md);
+    padding: var(--space-xs) var(--space-md);
+    background-color: var(--color-primary-transparent);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-transparent);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: var(--font-family-mono);
+    font-size: var(--text-sm);
+    transition: all 0.2s ease;
+  }
+  
+  .reset-button:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  @media (min-width: 640px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .projects-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   @media (max-width: 768px) {
-    .projects-filters {
+    .filters-container {
       flex-direction: column;
-      align-items: flex-start;
-      gap: var(--space-md);
+    }
+    
+    .filter-group {
+      width: 100%;
     }
   }
 
   @media print {
-    .projects-filters {
+    .filters-container {
       display: none;
     }
 
     .projects-page-container {
       padding: 0;
     }
+    
+    .projects-grid {
+      gap: var(--space-sm);
+    }
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const techFilter = document.getElementById('tech-filter');
+    const statusFilter = document.getElementById('status-filter');
+    const resetButton = document.getElementById('reset-filters');
+    const projectCards = document.querySelectorAll('.project-card');
+    const projectsGrid = document.getElementById('projects-grid');
+    const noResults = document.getElementById('no-results');
+    
+    // Función para aplicar los filtros
+    function applyFilters() {
+      const selectedTech = techFilter ? (techFilter as HTMLSelectElement).value.toLowerCase() : '';
+      const selectedStatus = statusFilter ? (statusFilter as HTMLSelectElement).value : '';
+      
+      let visibleCount = 0;
+      
+      projectCards.forEach(card => {
+        // Obtener tecnologías del proyecto
+        const techTags = Array.from(card.querySelectorAll('.tech-tag')).map(tag => {
+          const title = tag.getAttribute('title');
+          const text = tag.textContent || '';
+          return (title || text).toLowerCase();
+        });
+        
+        // Obtener estado (destacado o no)
+        const featured = card.getAttribute('data-featured') === 'true';
+        const status = featured ? 'Destacado' : 'Proyecto';
+        
+        // Aplicar filtros
+        const techMatch = selectedTech === '' || techTags.includes(selectedTech);
+        const statusMatch = selectedStatus === '' || status === selectedStatus;
+        
+        if (techMatch && statusMatch) {
+          (card as HTMLElement).style.display = 'flex';
+          visibleCount++;
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+      
+      // Mostrar mensaje si no hay resultados
+      if (noResults) {
+        if (visibleCount === 0) {
+          noResults.classList.remove('hidden');
+          if (projectsGrid) projectsGrid.classList.add('hidden');
+        } else {
+          noResults.classList.add('hidden');
+          if (projectsGrid) projectsGrid.classList.remove('hidden');
+        }
+      }
+    }
+    
+    // Agregar event listeners a los filtros
+    if (techFilter) techFilter.addEventListener('change', applyFilters);
+    if (statusFilter) statusFilter.addEventListener('change', applyFilters);
+    
+    // Restablecer filtros
+    if (resetButton) {
+      resetButton.addEventListener('click', () => {
+        if (techFilter) (techFilter as HTMLSelectElement).value = '';
+        if (statusFilter) (statusFilter as HTMLSelectElement).value = '';
+        
+        applyFilters();
+      });
+    }
+  });
+</script>
