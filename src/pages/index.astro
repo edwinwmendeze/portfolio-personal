@@ -5,8 +5,7 @@ import ProfileHeader from '@components/profile/ProfileHeader.astro';
 import FeaturedProjects from '@components/profile/FeaturedProjects.astro';
 import SkillsList from '@components/profile/SkillsList.astro';
 import ErrorBoundary from '@components/common/ErrorBoundary.astro';
-import Button from '@components/ui/Button.astro';
-import Card from '@components/ui/Card.astro';
+import CTASection from '@components/common/CTASection.astro';
 import { getProfileDataWithFallback } from '../data/api/profileData';
 import { getPath } from '@utils/routeUtils';
 import type { Profile } from '@types';
@@ -29,7 +28,7 @@ try {
   profileData={profile ? { basics: profile.basics } : undefined}
 >
   {error && (
-    <div class="error-message animate-fade-in">
+    <div class="error-message animate-on-scroll" data-animation="fade-in">
       <h2>No se pudieron cargar los datos</h2>
       <p>Hubo un problema al obtener la información del perfil. Por favor, intenta nuevamente más tarde.</p>
       {import.meta.env.DEV && <pre>{error.message}</pre>}
@@ -39,12 +38,12 @@ try {
   {profile && (
     <div class="home-container">
       <ErrorBoundary>
-        <div class="animate-fade-in">
+        <div>
           <ProfileHeader basics={profile.basics} />
         </div>
       </ErrorBoundary>
 
-      <div class="home-content animate-stagger">
+      <div class="home-content">
         {/* <ErrorBoundary>
           <div class="section-container">
             <FeaturedProjects projects={profile.projects} showTitle={true} />
@@ -58,31 +57,13 @@ try {
         </ErrorBoundary> */}
 
         <ErrorBoundary>
-          <div class="cta-container animate-scale-in">
-            <Card variant="elevated" class="cta-card">
-              <h2 class="cta-title">¿Buscas un profesional para tu equipo?</h2>
-              <p class="cta-description">Estoy disponible para nuevos proyectos y oportunidades laborales. ¡Hablemos sobre cómo puedo aportar valor a tu empresa!</p>
-              <div class="cta-buttons">
-                <Button href={getPath('cv')} variant="primary" size="medium">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                  </svg>
-                  Ver mi CV completo
-                </Button>
-                <Button href={getPath('contact')} variant="outline" size="medium">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                    <polyline points="22,6 12,13 2,6"></polyline>
-                  </svg>
-                  Contactar
-                </Button>
-              </div>
-            </Card>
-          </div>
+          <CTASection 
+            title="¿Buscas un profesional para tu equipo?" 
+            description="Estoy disponible para nuevos proyectos y oportunidades laborales. ¡Hablemos sobre cómo puedo aportar valor a tu empresa!"
+            primaryButtonText="Ver mi CV completo"
+            secondaryButtonText="Contactar"
+            delay={300}
+          />
         </ErrorBoundary>
       </div>
     </div>
@@ -116,38 +97,6 @@ try {
     text-align: center;
   }
   
-  .cta-container {
-    margin: var(--space-xl) 0;
-  }
-  
-  .cta-card {
-    text-align: center;
-    padding: var(--space-xl);
-    background-color: var(--color-background-alt);
-    border: 1px solid var(--color-border);
-  }
-  
-  .cta-title {
-    font-size: var(--text-xl);
-    margin-bottom: var(--space-md);
-    color: var(--color-primary);
-  }
-  
-  .cta-description {
-    margin-bottom: var(--space-lg);
-    color: var(--color-text-light);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .cta-buttons {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-md);
-    flex-wrap: wrap;
-  }
-  
   @media (max-width: 768px) {
     .home-content {
       gap: var(--space-lg);
@@ -156,44 +105,17 @@ try {
     .section-container {
       margin-bottom: var(--space-md);
     }
-    
-    .cta-buttons {
-      flex-direction: column;
-      gap: var(--space-sm);
-    }
   }
 </style>
 
 <script>
-  // Animación para los proyectos al hacer scroll
+  import { initAnimations } from '../scripts/animateOnScroll.js';
+  
   document.addEventListener('DOMContentLoaded', () => {
-    const projectCards = document.querySelectorAll('.project-card');
-    
-    // Añadir la clase hover-lift a todas las tarjetas de proyectos
-    projectCards.forEach(card => {
-      card.classList.add('hover-lift');
-    });
-    
-    // Implementar animación al scroll si IntersectionObserver está disponible
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-scale-in');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.2 });
-      
-      projectCards.forEach(card => {
-        (card as HTMLElement).style.opacity = "0";
-        observer.observe(card);
-      });
-    } else {
-      // Fallback para navegadores que no soportan IntersectionObserver
-      projectCards.forEach(card => {
-        card.classList.add('animate-fade-in');
-      });
-    }
+    initAnimations();
+  });
+  
+  document.addEventListener('astro:page-load', () => {
+    initAnimations();
   });
 </script>

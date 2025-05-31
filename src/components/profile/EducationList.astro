@@ -41,21 +41,21 @@ const hasEducation = education.length > 0;
 ---
 
 <ErrorBoundary>
-  <div class="education-container">
+  <div class="education-container animate-on-scroll" data-animation="fade-up">
     {showTitle && <h2 class="component-title">Formación Académica</h2>}
     
     {!hasEducation && <p class="no-education">No hay información académica disponible.</p>}
     
     {hasEducation && (
       <Card variant="border" class="education-card">
-        <ul class="education-list">
-          {sortedEducation.map(edu => {
+        <ul class="education-list" data-stagger="150">
+          {sortedEducation.map((edu, index) => {
             const startDate = formatDate(edu.startDate);
             const endDate = formatDate(edu.endDate);
             const dateRange = `${startDate} - ${endDate}`;
             
             return (
-              <li class="education-item">
+              <li class="education-item staggered-item">
                 <div class="education-content">
                   <div class="education-header">
                     <h3 class="institution">{edu.institution}</h3>
@@ -103,11 +103,16 @@ const hasEducation = education.length > 0;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     background-color: var(--color-background);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition: all var(--transition-fast);
+  }
+  
+  .education-item.animate {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
   }
   
   .education-item:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   }
   
@@ -189,3 +194,15 @@ const hasEducation = education.length > 0;
     }
   }
 </style>
+
+<script>
+  import { initAnimations } from '../../scripts/animateOnScroll.js';
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    initAnimations();
+  });
+  
+  document.addEventListener('astro:page-load', () => {
+    initAnimations();
+  });
+</script>

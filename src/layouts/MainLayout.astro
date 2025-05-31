@@ -95,6 +95,19 @@ const profileImage = profileData?.basics.image.remote || `${siteUrl}/favicon.svg
         });
       });
     </script>
+    
+    <!-- Script global para animaciones -->
+    <script>
+      import { initAnimations } from '../scripts/animateOnScroll.js';
+      
+      document.addEventListener('DOMContentLoaded', () => {
+        initAnimations();
+      });
+      
+      document.addEventListener('astro:page-load', () => {
+        initAnimations();
+      });
+    </script>
   </body>
 </html>
 

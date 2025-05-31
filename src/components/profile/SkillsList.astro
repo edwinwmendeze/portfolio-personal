@@ -21,7 +21,7 @@ const hasSkills = skills.length > 0;
 ---
 
 <ErrorBoundary>
-  <div class="skills-container">
+  <div class="skills-container animate-on-scroll" data-animation="fade-up">
     {showTitle && <h2 class="component-title">Habilidades</h2>}
     
     {!hasSkills && <p class="no-skills">No hay habilidades disponibles.</p>}
@@ -29,11 +29,11 @@ const hasSkills = skills.length > 0;
     {hasSkills && (
       <Card variant="border" class="skills-card">
         {hardSkills.length > 0 && (
-          <div class="skills-section">
+          <div class="skills-section animate-on-scroll" data-animation="fade-in" data-delay="200">
             <h3>Habilidades Técnicas</h3>
             
             {hardSkills.map(skill => (
-              <div class="skill-category">
+              <div class="skill-category staggered-item">
                 <h4>{skill.name}</h4>
                 {skill.keywords && skill.keywords.length > 0 && (
                   <div class="keywords">
@@ -48,12 +48,11 @@ const hasSkills = skills.length > 0;
         )}
         
         {softSkills.length > 0 && (
-          <div class="skills-section">
+          <div class="skills-section animate-on-scroll" data-animation="fade-in" data-delay="400">
             <h3>Habilidades Blandas</h3>
             
             {softSkills.map(skill => (
-              <div class="skill-category">
-
+              <div class="skill-category staggered-item">
                 {skill.keywords && skill.keywords.length > 0 && (
                   <div class="keywords">
                     {skill.keywords.map(keyword => (
@@ -144,3 +143,15 @@ const hasSkills = skills.length > 0;
     }
   }
 </style>
+
+<script>
+  import { initAnimations } from '../../scripts/animateOnScroll.js';
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    initAnimations();
+  });
+  
+  document.addEventListener('astro:page-load', () => {
+    initAnimations();
+  });
+</script>
