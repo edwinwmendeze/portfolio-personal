@@ -15,8 +15,8 @@ export function setupScrollAnimations() {
   // Configuración del observer
   const observerOptions = {
     root: null, // viewport
-    rootMargin: '0px',
-    threshold: 0.15 // Al menos 15% del elemento debe ser visible
+    rootMargin: '10px',
+    threshold: 0.15 // Aumentado ligeramente para que la animación comience un poco antes
   };
 
   // Crear IntersectionObserver
@@ -29,7 +29,7 @@ export function setupScrollAnimations() {
         if (animatedElements.has(element)) return;
         
         const delay = parseInt(element.dataset.delay || '0');
-        const staggerDelay = parseInt(element.dataset.stagger || '100');
+        const staggerDelay = parseInt(element.dataset.stagger || '30'); // Reducido de 50 a 30
         
         // Aplicar animación al elemento principal
         setTimeout(() => {
@@ -77,7 +77,7 @@ export function addAnimationStyles() {
   styleElement.textContent = `
     .animate-on-scroll {
       opacity: 0;
-      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.4s ease-out; // Más rápido (0.5s -> 0.4s)
       will-change: opacity, transform;
     }
     
@@ -86,7 +86,7 @@ export function addAnimationStyles() {
     }
     
     .animate-on-scroll[data-animation="fade-up"] {
-      transform: translateY(30px);
+      transform: translateY(8px); // Reducido de 15px a 8px
     }
     
     .animate-on-scroll[data-animation="fade-up"].animate {
@@ -94,7 +94,7 @@ export function addAnimationStyles() {
     }
     
     .animate-on-scroll[data-animation="fade-in"] {
-      transform: scale(0.95);
+      transform: scale(0.99); // Más sutil (0.98 -> 0.99)
     }
     
     .animate-on-scroll[data-animation="fade-in"].animate {
@@ -102,7 +102,7 @@ export function addAnimationStyles() {
     }
     
     .animate-on-scroll[data-animation="slide-in"] {
-      transform: translateX(-30px);
+      transform: translateX(-8px); // Reducido de -15px a -8px
     }
     
     .animate-on-scroll[data-animation="slide-in"].animate {
@@ -111,8 +111,8 @@ export function addAnimationStyles() {
     
     .staggered-item {
       opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.5s ease-out;
+      transform: translateY(5px); // Reducido de 10px a 5px
+      transition: all 0.35s ease-out; // Más rápido (0.4s -> 0.35s)
       will-change: opacity, transform;
     }
     

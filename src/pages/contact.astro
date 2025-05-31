@@ -8,15 +8,15 @@ const profile = await getProfileDataWithFallback();
 ---
 
 <MainLayout title="Contacto - Edwin Méndez" description="Ponte en contacto conmigo para colaboraciones o proyectos." profileData={{ basics: profile?.basics }}>
-  <div class="contact-container animate-on-scroll" data-animation="fade-up">
+  <div class="contact-container animate-on-scroll" data-animation="fade-in">
     <h1>Contacto</h1>
     
     <div class="contact-grid">
-      <div class="contact-info animate-on-scroll" data-animation="slide-in" data-delay="200">
+      <div class="contact-info">
         <h2>Información de contacto</h2>
         <p class="contact-intro">¿Interesado en trabajar juntos? Ponte en contacto conmigo a través de cualquiera de estos canales o completa el formulario.</p>
         
-        <div class="contact-channels" data-stagger="100">
+        <div class="contact-channels animate-on-scroll" data-animation="fade-in" data-delay="100" data-stagger="50">
           {profile?.basics?.email && (
             <div class="contact-channel staggered-item">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -74,34 +74,34 @@ const profile = await getProfileDataWithFallback();
         </div>
       </div>
 
-      <div class="contact-form-container animate-on-scroll" data-animation="fade-up" data-delay="400">
+      <div class="contact-form-container animate-on-scroll" data-animation="fade-in" data-delay="150">
         <h2>Envíame un mensaje</h2>
         <form id="contact-form" class="contact-form" action="https://formspree.io/f/mldjorey" method="POST">
           <!-- Quitamos _next ya que usamos AJAX y no queremos redireccionamiento -->
           <input type="hidden" name="_subject" value="Nuevo mensaje desde el portfolio">
           <input type="hidden" name="_format" value="json">
           <input type="hidden" name="_captcha" value="true">
-          <div class="form-group animate-on-scroll" data-animation="fade-up" data-delay="500">
+          <div class="form-group">
             <label for="name">Nombre</label>
             <input type="text" id="name" name="name" required>  
           </div>
           
-          <div class="form-group animate-on-scroll" data-animation="fade-up" data-delay="600">
+          <div class="form-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
           </div>
           
-          <div class="form-group animate-on-scroll" data-animation="fade-up" data-delay="700">
+          <div class="form-group">
             <label for="subject">Asunto</label>
             <input type="text" id="subject" name="subject" required>
           </div>
           
-          <div class="form-group animate-on-scroll" data-animation="fade-up" data-delay="800">
+          <div class="form-group">
             <label for="message">Mensaje</label>
             <textarea id="message" name="message" rows="5" required></textarea>
           </div>
           
-          <button type="submit" class="submit-button animate-on-scroll" data-animation="fade-up" data-delay="900">Enviar mensaje</button>
+          <button type="submit" class="submit-button">Enviar mensaje</button>
         </form>
         <div id="form-success" class="form-success hidden">¡Mensaje enviado correctamente! Me pondré en contacto contigo pronto.</div>
         <div id="form-error" class="form-error hidden">Hubo un error al enviar el mensaje. Por favor, inténtalo de nuevo.</div>
@@ -134,11 +134,6 @@ const profile = await getProfileDataWithFallback();
       e.preventDefault(); // Evitamos el envío tradicional del formulario
       
       const formData = new FormData(contactForm);
-      
-      // Indicador de carga (opcional)
-      // const loadingElement = document.createElement('div');
-      // loadingElement.innerText = 'Enviando...';
-      // contactForm.appendChild(loadingElement);
       
       fetch(contactForm.action, {
         method: 'POST',
