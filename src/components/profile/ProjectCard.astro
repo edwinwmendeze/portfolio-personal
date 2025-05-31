@@ -68,7 +68,7 @@ const visibleDescription = isTruncated
 const descriptionId = `desc-${project.name.replace(/\s+/g, '-')}`;
 ---
 
-<div class="project-card" data-featured={featured}>
+<div class="project-card" data-featured={featured} data-animate="fade-in">
   <div class="project-card-overlay"></div>
   
   {featured && (
@@ -196,6 +196,12 @@ const descriptionId = `desc-${project.name.replace(/\s+/g, '-')}`;
       background-color 0.3s ease;
     position: relative;
     height: 100%;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .project-card.animate {
+    animation: fadeInUp 0.7s ease-out forwards;
   }
 
   .project-card:hover {
@@ -597,6 +603,10 @@ const descriptionId = `desc-${project.name.replace(/\s+/g, '-')}`;
   }
 
   @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
     to {
       opacity: 1;
       transform: translateY(0);
@@ -671,6 +681,34 @@ const descriptionId = `desc-${project.name.replace(/\s+/g, '-')}`;
           }
         }
       });
+    });
+
+    // Configurar Intersection Observer para animaciones de entrada
+    const observerOptions = {
+      root: null, // viewport
+      rootMargin: '0px',
+      threshold: 0.15 // Al menos 15% del elemento debe ser visible
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          // Aplicar retraso escalonado para cada tarjeta
+          setTimeout(() => {
+            entry.target.classList.add('animate');
+          }, 150 * entry.target.dataset.index || 150 * index);
+          
+          // Dejar de observar después de animar
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observar todas las tarjetas de proyectos
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach((card, index) => {
+      card.dataset.index = index;
+      observer.observe(card);
     });
   });
 
