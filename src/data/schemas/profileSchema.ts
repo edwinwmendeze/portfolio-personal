@@ -51,7 +51,8 @@ const projectSchema = z.object({
   highlights: z.array(z.string()),
   url: z.string().url(),
   featured: z.boolean(),
-  technologies: z.array(z.string())
+  technologies: z.array(z.string()),
+  isNew: z.boolean().optional()
 });
 
 export const profileDataSchema = z.object({

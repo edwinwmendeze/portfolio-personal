@@ -53,6 +53,7 @@ export interface Project {
   url: string;
   featured: boolean;
   technologies: string[];
+  isNew?: boolean;
 }
 
 // Perfil completo
