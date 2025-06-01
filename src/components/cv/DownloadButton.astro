@@ -1,0 +1,61 @@
+---
+// Download button component
+const { text, lang } = Astro.props;
+
+// Set the path to the PDF based on the language
+const pdfPath = lang === 'en' ? '/cv-edwin-mendez-en.pdf' : '/cv-edwin-mendez-es.pdf';
+---
+
+<a href={pdfPath} download class="download-button">
+  <svg xmlns="http://www.w3.org/2000/svg" class="download-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+    <polyline points="7 10 12 15 17 10"></polyline>
+    <line x1="12" y1="15" x2="12" y2="3"></line>
+  </svg>
+  {text}
+</a>
+
+<style>
+  .download-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: #38b2ac;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(56, 178, 172, 0.3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+  }
+  
+  .download-button:hover {
+    background-color: #319795;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(56, 178, 172, 0.4);
+  }
+  
+  .download-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(56, 178, 172, 0.3);
+  }
+  
+  .download-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  /* Soporte para tema oscuro */
+  :global(.dark) .download-button {
+    background-color: #38b2ac;
+    box-shadow: 0 2px 4px rgba(56, 178, 172, 0.5);
+  }
+  
+  :global(.dark) .download-button:hover {
+    background-color: #2c7a7b;
+    box-shadow: 0 4px 6px rgba(56, 178, 172, 0.6);
+  }
+</style> 

@@ -1,0 +1,161 @@
+---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import ProfileSection from './ProfileSection.astro';
+import EducationSection from './EducationSection.astro';
+import SkillsSection from './SkillsSection.astro';
+import ProjectsSection from './ProjectsSection.astro';
+import DownloadButton from './DownloadButton.astro';
+import profileData from '../../data/profile.json';
+
+// Default language
+const defaultLang = 'es';
+---
+
+<div class="page-container">
+  <div class="cv-container">
+    <LanguageSwitcher />
+    
+    <div class="cv-content" id="cv-content">
+      <ProfileSection data={profileData} defaultLang={defaultLang} />
+      
+      <div class="cv-main-content">
+        <div class="cv-left-column">
+          <ProjectsSection data={profileData} defaultLang={defaultLang} />
+          <EducationSection data={profileData} defaultLang={defaultLang} />
+        </div>
+        
+        <div class="cv-right-column">
+          <SkillsSection data={profileData} defaultLang={defaultLang} />
+        </div>
+      </div>
+      
+      <div class="download-section">
+        <DownloadButton text="Download CV (PDF)" lang="en" />
+        <DownloadButton text="Descargar CV (PDF)" lang="es" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .page-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem;
+    background-color: #f0f2f5;
+    font-size: 0.9rem;
+  }
+
+  .cv-container {
+    width: 21cm; /* A4 width */
+    min-height: 29.7cm; /* A4 height */
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: #2d3748;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cv-content {
+    margin-top: 2rem;
+  }
+  
+  .cv-main-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .download-section {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+  }
+  
+  /* Soporte para tema oscuro */
+  :global(.dark) .page-container {
+    background-color: #1a202c;
+  }
+  
+  :global(.dark) .cv-container {
+    background-color: #2d3748;
+    color: #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  @media print {
+    .page-container {
+      padding: 0;
+      background: none;
+    }
+    
+    .cv-container {
+      width: 100%;
+      min-height: auto;
+      box-shadow: none;
+      padding: 0;
+    }
+    
+    .download-section {
+      display: none;
+    }
+  }
+
+  @media (max-width: 21cm) {
+    .page-container {
+      padding: 1rem;
+    }
+
+    .cv-container {
+      width: 100%;
+      min-height: auto;
+    }
+
+    .cv-main-content {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const langButtons = document.querySelectorAll<HTMLButtonElement>('.lang-button');
+    const contentElements = document.querySelectorAll<HTMLElement>('[data-lang]');
+    
+    let currentLang = 'es';
+    
+    const updateLanguage = (newLang: string) => {
+      currentLang = newLang;
+      
+      langButtons.forEach(button => {
+        button.classList.toggle('active', button.getAttribute('data-lang') === newLang);
+      });
+      
+      contentElements.forEach(element => {
+        if (element.getAttribute('data-lang') === newLang) {
+          element.style.display = 'block';
+        } else {
+          element.style.display = 'none';
+        }
+      });
+    };
+    
+    updateLanguage(currentLang);
+    
+    langButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const lang = button.getAttribute('data-lang');
+        if (lang) {
+          updateLanguage(lang);
+        }
+      });
+    });
+  });
+</script> 

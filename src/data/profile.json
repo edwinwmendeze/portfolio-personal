@@ -95,11 +95,54 @@
       ]
     }
   ],
+  "languages": [
+    {
+      "language": "Español",
+      "fluency": "Nativo"
+    },
+    {
+      "language": "Inglés",
+      "fluency": "Basico"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Certificado de Python",
+      "issuer": "Coursera",
+      "date": "2024-01-01"
+    }
+  ],
+  "work": [
+    {
+      "company": "Empresa 1",
+      "position": "Desarrollador",
+      "startDate": "2020-01-01",
+      "endDate": "2021-12-31",
+      "summary": "Descripción de la experiencia laboral",
+      "highlights": [
+        "Descripción de la experiencia laboral",
+        "Descripción de la experiencia laboral",
+        "Descripción de la experiencia laboral"
+      ]
+    },
+    {
+      "company": "Empresa 2",
+      "position": "Desarrollador",
+      "startDate": "2020-01-01",
+      "endDate": "2021-12-31",
+      "summary": "Descripción de la experiencia laboral",
+      "highlights": [
+        "Descripción de la experiencia laboral",
+        "Descripción de la experiencia laboral",
+        "Descripción de la experiencia laboral"
+      ]
+    }
+  ],
   "education": [
     {
       "institution": "Universidad Continental",
-      "area": "Ingeniería de Sistemas e informatica",
-      "studyType": "Ingenieria",
+      "area": "Ingeniería de Sistemas e Informática",
+      "studyType": "Ingeniería",
       "startDate": "2016-03-01",
       "endDate": ""
     },

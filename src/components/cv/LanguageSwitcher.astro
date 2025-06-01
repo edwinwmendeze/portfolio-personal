@@ -1,0 +1,39 @@
+---
+// Language switcher component
+---
+
+<div class="language-switcher">
+  <button class="lang-button" data-lang="en">English</button>
+  <button class="lang-button active" data-lang="es">Español</button>
+</div>
+
+<style>
+  .language-switcher {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  .lang-button {
+    background: transparent;
+    border: 1px solid #cbd5e0;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+  
+  .lang-button:hover {
+    background-color: #edf2f7;
+  }
+  
+  .lang-button.active {
+    background-color: #38b2ac;
+    color: white;
+    border-color: #38b2ac;
+  }
+</style> 

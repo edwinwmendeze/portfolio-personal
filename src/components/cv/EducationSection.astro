@@ -1,0 +1,164 @@
+---
+// Education section
+const { data, defaultLang } = Astro.props;
+const { education } = data;
+
+// Format date function
+const formatDate = (dateString: string | undefined) => {
+  if (!dateString) return 'Presente';
+  
+  const date = new Date(dateString);
+  return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long' });
+};
+
+// Format date for English
+const formatDateEn = (dateString: string | undefined) => {
+  if (!dateString) return 'Present';
+  
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+};
+
+interface Education {
+  institution: string;
+  area: string;
+  studyType: string;
+  startDate: string;
+  endDate: string;
+}
+---
+
+<section class="education-section">
+  <div data-lang="en" class={defaultLang === 'es' ? 'hidden' : ''}>
+    <h2 class="section-title">Education</h2>
+    
+    <div class="timeline">
+      {education.map((edu: Education) => (
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <h3 class="item-title">{edu.studyType} in {edu.area}</h3>
+            <p class="item-subtitle">{edu.institution} • {formatDateEn(edu.startDate)} - {edu.endDate ? formatDateEn(edu.endDate) : 'Present'}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+  
+  <div data-lang="es" class={defaultLang === 'en' ? 'hidden' : ''}>
+    <h2 class="section-title">Educación</h2>
+    
+    <div class="timeline">
+      {education.map((edu: Education) => (
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <h3 class="item-title">{edu.studyType} en {edu.area}</h3>
+            <p class="item-subtitle">{edu.institution} • {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'Presente'}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .education-section {
+    margin-bottom: 2rem;
+  }
+  
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0 0 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #38b2ac;
+  }
+  
+  .timeline {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+  
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 7px;
+    width: 2px;
+    background-color: #e2e8f0;
+  }
+  
+  .timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  .timeline-marker {
+    position: absolute;
+    left: -1.75rem;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #38b2ac;
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px #38b2ac;
+    z-index: 1;
+  }
+  
+  .timeline-content {
+    padding: 0 0 0 0.75rem;
+  }
+  
+  .item-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem;
+    color: #2d3748;
+  }
+  
+  .item-subtitle {
+    font-size: 0.85rem;
+    color: #718096;
+    margin: 0 0 0.5rem;
+  }
+  
+  .item-details {
+    margin: 0;
+    line-height: 1.5;
+    color: #4a5568;
+    font-size: 0.9rem;
+  }
+
+  .hidden {
+    display: none;
+  }
+  
+  /* Soporte para tema oscuro */
+  :global(.dark) .section-title {
+    color: #e2e8f0;
+    border-bottom-color: #38b2ac;
+  }
+  
+  :global(.dark) .timeline::before {
+    background-color: #4a5568;
+  }
+  
+  :global(.dark) .timeline-marker {
+    border-color: #2d3748;
+  }
+  
+  :global(.dark) .item-title {
+    color: #e2e8f0;
+  }
+  
+  :global(.dark) .item-subtitle {
+    color: #a0aec0;
+  }
+  
+  :global(.dark) .item-details {
+    color: #a0aec0;
+  }
+</style> 

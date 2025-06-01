@@ -1,0 +1,1047 @@
+---
+import MainLayout from '@layouts/MainLayout.astro';
+import { getProfileDataWithFallback } from '../data/api/profileData';
+import type { Profile, Education, Project, Skill } from '@types';
+import Tag from '@components/ui/Tag.astro';
+import Button from '@components/ui/Button.astro';
+
+// Tipos adicionales para manejar los datos de experiencia laboral
+interface WorkExperience {
+  company: string;
+  position: string;
+  startDate: string;
+  endDate?: string;
+  summary: string;
+  highlights?: string[];
+}
+
+// Tipo para idiomas
+interface Language {
+  language: string;
+  fluency: string;
+}
+
+// Tipo para certificaciones
+interface Certificate {
+  name: string;
+  issuer: string;
+  date: string;
+}
+
+// Extender el tipo Profile con la propiedad work que falta en la definición original
+interface ExtendedProfile extends Profile {
+  work?: WorkExperience[];
+  languages?: Language[];
+  certificates?: Certificate[];
+}
+
+const profile = await getProfileDataWithFallback() as ExtendedProfile;
+---
+
+<MainLayout 
+  title="Currículum - Edwin Méndez" 
+  description="Currículum profesional de Edwin Méndez"
+  profileData={{ basics: profile?.basics }}
+  showPrintButton={true}
+>
+  <main class="cv-container">
+    <!-- Encabezado del CV con información profesional destacada -->
+    <div class="cv-header">
+      <div class="profile-info-container">
+        <div class="profile-photo">
+          {profile?.basics?.image && (
+            <img 
+              src={typeof profile.basics.image === 'string' ? profile.basics.image : '/images/profile-placeholder.jpg'} 
+              alt={`Foto de ${profile?.basics?.name || 'Perfil'}`} 
+              class="profile-image"
+            />
+          )}
+          {!profile?.basics?.image && (
+            <div class="profile-image-placeholder">
+              <span>{profile?.basics?.name?.charAt(0) || 'E'}</span>
+            </div>
+          )}
+        </div>
+        <div class="profile-details">
+          <h1>{profile?.basics?.name} {profile?.basics?.last_name}</h1>
+          <p class="headline">{profile?.basics?.occupation}</p>
+          
+          <div class="contact-details">
+            {profile?.basics?.email && (
+              <div class="contact-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <span>{profile.basics.email}</span>
+              </div>
+            )}
+            
+            {profile?.basics?.location && (
+              <div class="contact-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span>{profile.basics.location.city}, {profile.basics.location.region}</span>
+              </div>
+            )}
+            
+            {profile?.basics?.profiles && profile.basics.profiles.length > 0 && (
+              <div class="social-profiles">
+                {profile.basics.profiles.map((social) => (
+                  <a href={social.url} target="_blank" rel="noopener noreferrer" class="social-link" title={social.network}>
+                    {social.network.toLowerCase() === 'linkedin' && (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    )}
+                    {social.network.toLowerCase() === 'github' && (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    )}
+                    {social.network.toLowerCase() === 'twitter' && (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+                    )}
+                    {social.network.toLowerCase() === 'facebook' && (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                    )}
+                    {!['linkedin', 'github', 'twitter', 'facebook'].includes(social.network.toLowerCase()) && (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    )}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cv-content">
+      <div class="cv-main-column">
+        <!-- Resumen Profesional -->
+        {profile?.basics?.summary && (
+          <section class="cv-section">
+            <h2>Perfil Profesional</h2>
+            <div class="section-content">
+              <p class="summary">{profile.basics.summary}</p>
+            </div>
+          </section>
+        )}
+        
+        <!-- Experiencia Profesional -->
+        {profile?.work && profile.work.length > 0 && (
+          <section class="cv-section">
+            <h2>Experiencia Profesional</h2>
+            <div class="section-content timeline">
+              {profile.work.map((job: WorkExperience) => (
+                <div class="timeline-item">
+                  <div class="timeline-marker"></div>
+                  <div class="timeline-content">
+                    <div class="timeline-header">
+                      <h3 class="job-title">{job.position}</h3>
+                      <span class="timeline-date">
+                        {job.startDate?.toString() || ''} – {job.endDate?.toString() || 'Presente'}
+                      </span>
+                    </div>
+                    <span class="job-company">{job.company}</span>
+                    <p class="job-summary">{job.summary}</p>
+                    {job.highlights && job.highlights.length > 0 && (
+                      <ul class="job-highlights">
+                        {job.highlights.map((item: string) => (
+                          <li>{item}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- Proyectos Destacados - Ahora con diseño mejorado para impresión física -->
+        {profile?.projects && profile.projects.filter(p => p.featured).length > 0 && (
+          <section class="cv-section">
+            <h2>Proyectos Destacados</h2>
+            <div class="section-content projects-grid">
+              {profile.projects.filter(p => p.featured).map((project: Project) => (
+                <div class="project-card">
+                  <h3 class="project-title">{project.name}</h3>
+                  
+                  {project.description && <p class="project-description">{project.description as string}</p>}
+                  
+                  {project.highlights && project.highlights.length > 0 && (
+                    <ul class="project-highlights">
+                      {project.highlights.map((highlight: string) => (
+                        <li>{highlight}</li>
+                      ))}
+                    </ul>
+                  )}
+                  
+                  {project.technologies && project.technologies.length > 0 && (
+                    <div class="project-tags">
+                      {project.technologies.map((tech: string) => (
+                        <Tag text={tech} variant="default" size="small" />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+      
+      <div class="cv-side-column">
+        <!-- Educación -->
+        {profile?.education && profile.education.length > 0 && (
+          <section class="cv-section">
+            <h2>Educación</h2>
+            <div class="section-content">
+              {profile.education.map((edu: Education) => (
+                <div class="education-item">
+                  <h3 class="education-degree">{edu.studyType} en {edu.area}</h3>
+                  <span class="education-institution">{edu.institution}</span>
+                  <span class="education-period">
+                    {edu.startDate?.toString() || ''} – {edu.endDate?.toString() || 'Presente'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+        
+        <!-- Habilidades -->
+        {profile?.skills && profile.skills.length > 0 && (
+          <section class="cv-section">
+            <h2>Habilidades</h2>
+            <div class="section-content">
+              {profile.skills.map((skill: Skill) => (
+                <div class="skill-category">
+                  <h3 class="skill-name">{skill.name}</h3>
+                  <div class="skill-progress-container">
+                    <div class="skill-tags">
+                      {skill.keywords.map((keyword: string) => (
+                        <Tag text={keyword} variant="default" size="small" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+        
+        <!-- Idiomas, si existieran en el perfil -->
+        {profile?.languages && profile.languages.length > 0 && (
+          <section class="cv-section">
+            <h2>Idiomas</h2>
+            <div class="section-content">
+              <ul class="languages-list">
+                {profile.languages.map((language: Language) => (
+                  <li class="language-item">
+                    <span class="language-name">{language.language}</span>
+                    <span class="language-level">{language.fluency}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+        
+        <!-- Certificaciones, si existieran en el perfil -->
+        {profile?.certificates && profile.certificates.length > 0 && (
+          <section class="cv-section">
+            <h2>Certificaciones</h2>
+            <div class="section-content">
+              <ul class="certificates-list">
+                {profile.certificates.map((cert: Certificate) => (
+                  <li class="certificate-item">
+                    <span class="certificate-name">{cert.name}</span>
+                    <span class="certificate-issuer">{cert.issuer}</span>
+                    <span class="certificate-date">{cert.date}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+      </div>
+    </div>
+    
+    <!-- Botón para imprimir (solo visible en pantalla) -->
+    <div class="print-button-container">
+      <Button id="print-cv-button" variant="primary" size="small" aria-label="Imprimir CV" data-print="true" class="print-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"></polyline>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+          <rect x="6" y="14" width="12" height="8"></rect>
+        </svg>
+        <span class="print-text">Imprimir CV</span>
+      </Button>
+    </div>
+  </main>
+</MainLayout>
+
+<script>
+  // Funcionalidad de impresión
+  document.getElementById('print-cv-button')?.addEventListener('click', () => {
+    window.print();
+  });
+</script>
+
+<style>
+  /* Estilos generales */
+  .cv-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+  }
+  
+  /* Diseño de encabezado mejorado */
+  .cv-header {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-md);
+    border-bottom: 2px solid var(--color-primary);
+    background-color: var(--color-card-background);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  
+  .profile-info-container {
+    display: flex;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+  
+  .profile-photo {
+    flex-shrink: 0;
+  }
+  
+  .profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-image-placeholder {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 72px;
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-details {
+    flex-grow: 1;
+  }
+  
+  .profile-details h1 {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-xs);
+    color: var(--color-heading);
+    font-weight: 700;
+  }
+  
+  .headline {
+    font-size: var(--text-xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-md);
+    font-weight: 500;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .headline::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-sm);
+  }
+  
+  .contact-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md) var(--space-xl);
+    margin-top: var(--space-md);
+  }
+  
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--text-sm);
+    background-color: var(--color-background);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-md);
+    transition: transform var(--transition-fast);
+  }
+  
+  .contact-item:hover {
+    transform: translateY(-2px);
+  }
+  
+  .contact-item svg {
+    color: var(--color-primary);
+  }
+  
+  .social-profiles {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+  
+  .social-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-background);
+    color: var(--color-primary);
+    transition: all var(--transition-fast);
+    border: 1px solid var(--color-border);
+  }
+  
+  .social-link:hover {
+    background-color: var(--color-primary);
+    color: white;
+    transform: translateY(-3px);
+  }
+  
+  /* Estructura de dos columnas */
+  .cv-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+  }
+  
+  /* Secciones */
+  .cv-section {
+    margin-bottom: var(--space-xl);
+    background-color: var(--color-card-background);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .cv-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+  
+  .cv-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-sm);
+  }
+  
+  .cv-section h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-md);
+    color: var(--color-heading);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding-left: var(--space-sm);
+  }
+  
+  .section-content {
+    padding-left: var(--space-sm);
+  }
+  
+  /* Resumen */
+  .summary {
+    font-size: var(--text-md);
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+  
+  /* Timeline para experiencia profesional */
+  .timeline {
+    position: relative;
+  }
+  
+  .timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 6px;
+    width: 2px;
+    background-color: var(--color-border);
+  }
+  
+  .timeline-item {
+    position: relative;
+    padding-left: var(--space-xl);
+    margin-bottom: var(--space-xl);
+  }
+  
+  .timeline-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    z-index: 1;
+    box-shadow: 0 0 0 4px rgba(0, 170, 179, 0.1);
+  }
+  
+  .timeline-content {
+    position: relative;
+    background-color: var(--color-background);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    transition: transform var(--transition-normal);
+  }
+  
+  .timeline-content:hover {
+    transform: translateX(3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-xs);
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+  
+  .timeline-date {
+    font-size: var(--text-sm);
+    color: var(--color-primary);
+    font-weight: 600;
+    background-color: rgba(0, 170, 179, 0.08);
+    padding: var(--space-2xs) var(--space-sm);
+    border-radius: var(--radius-full);
+  }
+  
+  /* Experiencia */
+  .job-title {
+    font-size: var(--text-lg);
+    color: var(--color-heading);
+    margin-bottom: 0;
+  }
+  
+  .job-company {
+    font-weight: 600;
+    color: var(--color-text-light);
+    display: block;
+    margin-bottom: var(--space-sm);
+    font-size: var(--text-md);
+  }
+  
+  .job-summary {
+    margin-bottom: var(--space-sm);
+    line-height: 1.6;
+  }
+  
+  .job-highlights {
+    padding-left: var(--space-lg);
+    margin-top: var(--space-sm);
+  }
+  
+  .job-highlights li {
+    margin-bottom: var(--space-sm);
+    position: relative;
+    line-height: 1.6;
+  }
+  
+  .job-highlights li::before {
+    content: "•";
+    color: var(--color-primary);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+  }
+  
+  /* Educación */
+  .education-item {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background-color: var(--color-background);
+    margin-bottom: var(--space-md);
+    border: 1px solid var(--color-border);
+    transition: transform var(--transition-normal);
+  }
+  
+  .education-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  
+  .education-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .education-degree {
+    font-size: var(--text-md);
+    margin-bottom: var(--space-2xs);
+    color: var(--color-heading);
+  }
+  
+  .education-institution {
+    font-weight: 500;
+    display: block;
+    color: var(--color-text);
+    margin-bottom: var(--space-2xs);
+  }
+  
+  .education-period {
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    display: block;
+  }
+  
+  /* Habilidades */
+  .skill-category {
+    margin-bottom: var(--space-md);
+  }
+  
+  .skill-category:last-child {
+    margin-bottom: 0;
+  }
+  
+  .skill-name {
+    font-size: var(--text-md);
+    margin-bottom: var(--space-sm);
+    color: var(--color-heading);
+    position: relative;
+  }
+  
+  .skill-name::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-sm);
+  }
+  
+  .skill-progress-container {
+    margin-top: var(--space-sm);
+  }
+  
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+  
+  /* Idiomas */
+  .languages-list, .certificates-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .language-item, .certificate-item {
+    background-color: var(--color-background);
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-sm);
+    border: 1px solid var(--color-border);
+    transition: transform var(--transition-fast);
+  }
+  
+  .language-item:hover, .certificate-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .language-name, .certificate-name {
+    font-weight: 600;
+    display: block;
+    color: var(--color-heading);
+    margin-bottom: var(--space-2xs);
+  }
+  
+  .language-level, .certificate-issuer {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    display: block;
+  }
+  
+  .certificate-date {
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    display: block;
+    margin-top: var(--space-2xs);
+  }
+  
+  /* Proyectos */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-lg);
+  }
+  
+  .project-card {
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    transition: all var(--transition-normal);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+    border-color: var(--color-primary);
+  }
+  
+  .project-title {
+    font-size: var(--text-lg);
+    color: var(--color-heading);
+    margin-bottom: var(--space-sm);
+    position: relative;
+    padding-bottom: var(--space-xs);
+  }
+  
+  .project-title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-sm);
+  }
+  
+  .project-description {
+    margin-bottom: var(--space-sm);
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+  
+  .project-highlights {
+    padding-left: var(--space-lg);
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+  
+  .project-highlights li {
+    margin-bottom: var(--space-xs);
+    line-height: 1.5;
+  }
+
+  .project-highlights li::before {
+    content: "•";
+    color: var(--color-primary);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+  }
+  
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: auto;
+    padding-top: var(--space-sm);
+  }
+  
+  /* Botón de impresión */
+  .print-button-container {
+    display: flex;
+    justify-content: center;
+    margin: var(--space-xl) 0;
+  }
+  
+  .print-button {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    transition: all var(--transition-normal);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .print-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Estilos para impresión */
+  @media print {
+    .print-button-container {
+      display: none;
+    }
+    
+    .cv-container {
+      padding: 0;
+      max-width: 100%;
+    }
+    
+    body {
+      font-size: 11pt;
+      color: #000;
+      background-color: white;
+    }
+    
+    .cv-header {
+      background-color: white;
+      box-shadow: none;
+      border-bottom: 1px solid #ccc;
+      padding: 0 0 15pt 0;
+      margin-bottom: 15pt;
+    }
+    
+    .cv-section {
+      background-color: white;
+      box-shadow: none;
+      border: none;
+      padding: 0;
+      margin-bottom: 15pt;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    
+    .cv-section::before {
+      width: 0;
+    }
+    
+    .cv-section:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .cv-content {
+      display: block;
+    }
+    
+    .cv-side-column {
+      margin-top: 20pt;
+    }
+    
+    .timeline-content, 
+    .education-item, 
+    .project-card,
+    .language-item,
+    .certificate-item {
+      background-color: white;
+      border: 1px solid #eee;
+      box-shadow: none;
+    }
+    
+    .timeline-content:hover,
+    .education-item:hover,
+    .project-card:hover,
+    .language-item:hover,
+    .certificate-item:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .social-profiles {
+      display: none;
+    }
+    
+    h1, h2, h3, h4 {
+      color: #000;
+      page-break-after: avoid;
+    }
+    
+    .profile-image, .profile-image-placeholder {
+      width: 100px;
+      height: 100px;
+      border: 1px solid #333;
+      box-shadow: none;
+    }
+    
+    .headline {
+      color: #333;
+    }
+    
+    .headline::after,
+    .project-title::after,
+    .skill-name::after {
+      display: none;
+    }
+    
+    .contact-item {
+      background-color: transparent;
+      padding: 0;
+    }
+    
+    .contact-item svg {
+      color: #333;
+    }
+    
+    .timeline::before {
+      background-color: #aaa;
+    }
+    
+    .timeline-marker {
+      background-color: #333;
+      box-shadow: none;
+    }
+    
+    .timeline-date {
+      color: #333;
+      background-color: transparent;
+    }
+    
+    .job-company, .education-institution {
+      font-weight: 600;
+    }
+    
+    /* Proyectos en impresión */
+    .projects-grid {
+      display: block;
+    }
+    
+    .project-card {
+      margin-bottom: 15pt;
+      page-break-inside: avoid;
+      border: none;
+      border-bottom: 1px solid #eee;
+      border-radius: 0;
+      padding: 0 0 10pt 0;
+    }
+    
+    .project-card:last-child {
+      border-bottom: none;
+    }
+    
+    /* Asegurar que los tags se vean bien en impresión */
+    :global(.tag) {
+      color: #333 !important;
+      background-color: #eee !important;
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+    }
+    
+    /* Ajustes para impresión */
+    @page {
+      margin: 1.5cm;
+      size: A4;
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 900px) {
+    .cv-content {
+      grid-template-columns: 1fr;
+    }
+    
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .profile-info-container {
+      flex-direction: column;
+      text-align: center;
+      gap: var(--space-md);
+    }
+    
+    .headline::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .contact-details {
+      justify-content: center;
+    }
+    
+    .social-profiles {
+      justify-content: center;
+    }
+    
+    .timeline::before {
+      left: 4px;
+    }
+    
+    .timeline-marker {
+      width: 10px;
+      height: 10px;
+      top: 6px;
+      left: 0;
+    }
+    
+    .timeline-item {
+      padding-left: var(--space-lg);
+    }
+    
+    .timeline-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .project-title::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .cv-container {
+      padding: 0 var(--space-sm);
+    }
+    
+    .cv-header {
+      padding: var(--space-md);
+    }
+    
+    .cv-section {
+      padding: var(--space-md);
+    }
+    
+    h1 {
+      font-size: var(--text-2xl);
+    }
+    
+    h2 {
+      font-size: var(--text-lg);
+    }
+    
+    h3 {
+      font-size: var(--text-md);
+    }
+    
+    .project-card {
+      padding: var(--space-sm);
+    }
+    
+    .job-highlights, .project-highlights {
+      padding-left: var(--space-md);
+    }
+  }
+</style>
