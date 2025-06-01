@@ -155,3 +155,71 @@ h3 {
     box-shadow: none !important;
   }
 }
+
+/* Estilos específicos para impresión */
+@media print {
+  /* Reset general para impresión */
+  html, body {
+    background-color: white;
+    color: black;
+    font-size: 11pt;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Ocultar elementos no deseados en impresión */
+  header, footer, nav, .language-switcher, .download-section, .print-section, 
+  button:not([data-print="false"]), .theme-toggle {
+    display: none !important;
+  }
+  
+  /* Ajustar anchos y márgenes */
+  body {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Preservar colores críticos */
+  h1, h2, h3, h4 {
+    color: #2d3748;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+  
+  /* Prevenir cortes en elementos importantes */
+  ul, ol, table, figure, .project-item, .education-item, .contact-section, .skills-section {
+    page-break-inside: avoid;
+  }
+  
+  /* Evitar urls visibles en los enlaces */
+  a {
+    color: #2d3748;
+    text-decoration: none;
+  }
+  
+  a[href^="http"]:after {
+    content: "";
+  }
+  
+  /* Ajustes de tamaño para encabezados */
+  h1 {
+    font-size: 16pt;
+  }
+  
+  h2 {
+    font-size: 14pt;
+  }
+  
+  h3 {
+    font-size: 12pt;
+  }
+  
+  /* Configuración de página */
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+}

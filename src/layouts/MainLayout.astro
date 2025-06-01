@@ -91,7 +91,11 @@ const profileImage = profileData?.basics.image.remote || `${siteUrl}/favicon.svg
       // Busca botones con data-print
       document.querySelectorAll('[data-print]').forEach(button => {
         button.addEventListener('click', () => {
-          window.print();
+          // Añadimos un pequeño retraso para permitir que otros scripts (como el selector de idioma)
+          // puedan ejecutarse primero
+          setTimeout(() => {
+            window.print();
+          }, 100);
         });
       });
     </script>

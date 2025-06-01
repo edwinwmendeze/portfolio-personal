@@ -5,7 +5,7 @@ import EducationSection from './EducationSection.astro';
 import SkillsSection from './SkillsSection.astro';
 import ProjectsSection from './ProjectsSection.astro';
 import ContactSection from './ContactSection.astro';
-import DownloadButton from './DownloadButton.astro';
+import Button from '../ui/Button.astro';
 import profilesConfig from '../../data/profiles.json';
 import profileES from '../../data/profile_es.json';
 import profileEN from '../../data/profile_en.json';
@@ -28,15 +28,49 @@ const defaultLang = profilesConfig.default;
       <div data-lang="es" class={defaultLang === 'en' ? 'hidden' : ''}>
         <ProfileSection data={profiles.es} />
         
-        <div class="cv-main-content">
-          <div class="cv-left-column">
-            <ProjectsSection data={profiles.es} />
-            <EducationSection data={profiles.es} />
+        <!-- Estructura para visualización web -->
+        <div class="cv-web-layout">
+          <div class="cv-main-content">
+            <div class="cv-left-column">
+              <div class="web-projects">
+                <ProjectsSection data={profiles.es} />
+              </div>
+              <div class="web-education">
+                <EducationSection data={profiles.es} />
+              </div>
+            </div>
+            
+            <div class="cv-right-column">
+              <div class="web-contact">
+                <ContactSection data={profiles.es} />
+              </div>
+              <div class="web-skills">
+                <SkillsSection data={profiles.es} />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Layout especial para impresión -->
+        <div class="cv-print-layout">
+          <!-- Fila 1: Contacto y Educación -->
+          <div class="contact-education-row">
+            <div class="print-contact">
+              <ContactSection data={profiles.es} />
+            </div>
+            <div class="print-education">
+              <EducationSection data={profiles.es} />
+            </div>
           </div>
           
-          <div class="cv-right-column">
-            <ContactSection data={profiles.es} />
+          <!-- Fila 2: Habilidades -->
+          <div class="print-skills">
             <SkillsSection data={profiles.es} />
+          </div>
+          
+          <!-- Fila 3: Proyectos -->
+          <div class="print-projects">
+            <ProjectsSection data={profiles.es} />
           </div>
         </div>
       </div>
@@ -44,22 +78,88 @@ const defaultLang = profilesConfig.default;
       <div data-lang="en" class={defaultLang === 'es' ? 'hidden' : ''}>
         <ProfileSection data={profiles.en} />
         
-        <div class="cv-main-content">
-          <div class="cv-left-column">
-            <ProjectsSection data={profiles.en} />
-            <EducationSection data={profiles.en} />
+        <!-- Estructura para visualización web -->
+        <div class="cv-web-layout">
+          <div class="cv-main-content">
+            <div class="cv-left-column">
+              <div class="web-projects">
+                <ProjectsSection data={profiles.en} />
+              </div>
+              <div class="web-education">
+                <EducationSection data={profiles.en} />
+              </div>
+            </div>
+            
+            <div class="cv-right-column">
+              <div class="web-contact">
+                <ContactSection data={profiles.en} />
+              </div>
+              <div class="web-skills">
+                <SkillsSection data={profiles.en} />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Layout especial para impresión -->
+        <div class="cv-print-layout">
+          <!-- Fila 1: Contacto y Educación -->
+          <div class="contact-education-row">
+            <div class="print-contact">
+              <ContactSection data={profiles.en} />
+            </div>
+            <div class="print-education">
+              <EducationSection data={profiles.en} />
+            </div>
           </div>
           
-          <div class="cv-right-column">
-            <ContactSection data={profiles.en} />
+          <!-- Fila 2: Habilidades -->
+          <div class="print-skills">
             <SkillsSection data={profiles.en} />
+          </div>
+          
+          <!-- Fila 3: Proyectos -->
+          <div class="print-projects">
+            <ProjectsSection data={profiles.en} />
           </div>
         </div>
       </div>
       
-      <div class="download-section">
-        <DownloadButton text="Download CV (PDF)" lang="en" />
-        <DownloadButton text="Descargar CV (PDF)" lang="es" />
+      <div class="print-section">
+        <Button 
+          id="print-cv" 
+          variant="primary" 
+          size="medium"
+          ariaLabel="Imprimir CV"
+          data-print="true"
+          class="print-button"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span class="print-text">
+            {defaultLang === 'es' ? 'Imprimir CV' : 'Print CV'}
+          </span>
+        </Button>
+        
+        <!-- <Button 
+          id="download-pdf" 
+          variant="secondary" 
+          size="medium"
+          ariaLabel="Descargar PDF"
+          class="download-button"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span class="download-text">
+            {defaultLang === 'es' ? 'Descargar PDF' : 'Download PDF'}
+          </span>
+        </Button> -->
       </div>
     </div>
   </div>
@@ -92,12 +192,18 @@ const defaultLang = profilesConfig.default;
     margin-top: 2rem;
   }
   
+  /* Estructura normal para visualización web */
   .cv-main-content {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 2rem;
     margin-top: 2rem;
     align-items: start;
+  }
+  
+  /* Layout especial de impresión - oculto en pantalla */
+  .cv-print-layout {
+    display: none;
   }
 
   .cv-left-column, .cv-right-column {
@@ -116,12 +222,30 @@ const defaultLang = profilesConfig.default;
     padding-top: 0;
   }
   
-  .download-section {
+  .print-section {
     display: flex;
     justify-content: center;
-    gap: 1rem;
     margin-top: 3rem;
-    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .print-button, .download-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(56, 178, 172, 0.3);
+    padding: 0.6rem 1.2rem;
+  }
+  
+  .print-button:hover, .download-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(56, 178, 172, 0.4);
+  }
+  
+  .print-text, .download-text {
+    font-size: 0.9rem;
+    font-weight: 500;
   }
   
   /* Clase global para ocultar elementos */
@@ -141,20 +265,303 @@ const defaultLang = profilesConfig.default;
   }
   
   @media print {
+    /* Reset para impresión */
+    @page {
+      size: A4;
+      margin: 0.8cm; /* Reducir márgenes de página */
+    }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+      color: black;
+      font-size: 11pt; /* Reducir tamaño de fuente base */
+    }
+    
     .page-container {
       padding: 0;
-      background: none;
+      background: white;
+      display: block;
+      height: auto;
+      width: 100%;
+      min-height: auto;
     }
     
     .cv-container {
       width: 100%;
+      height: auto;
       min-height: auto;
-      box-shadow: none;
       padding: 0;
+      margin: 0;
+      box-shadow: none;
+      border-radius: 0;
+      color: black;
+      background-color: white;
     }
     
-    .download-section {
-      display: none;
+    /* Eliminar elementos no necesarios */
+    .print-section, .language-switcher {
+      display: none !important;
+    }
+    
+    /* Mantener la estructura del contenido */
+    .cv-content {
+      margin-top: 0;
+    }
+    
+    /* Control de visibilidad para evitar duplicación */
+    .cv-web-layout {
+      display: none !important;
+    }
+    
+    .cv-print-layout {
+      display: block !important;
+    }
+    
+    /* Asegurarse que solo un conjunto de componentes sea visible */
+    .web-projects, .web-education, .web-contact, .web-skills {
+      display: none !important;
+    }
+    
+    .print-projects, .print-education, .print-contact, .print-skills {
+      display: block !important;
+    }
+    
+    /* Reorganizar orden de las secciones en impresión */
+    :global(.profile-section) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 0.5rem; /* Reducir margen */
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+    
+    /* Ocultar la foto en el modo impresión */
+    :global(.profile-image) {
+      display: none !important;
+    }
+    
+    /* Optimizar el perfil para ocupar menos espacio */
+    :global(.profile-name) {
+      font-size: 14pt; /* Reducir tamaño */
+      font-weight: 700;
+      margin-bottom: 0.1rem;
+      margin-top: 0;
+    }
+    
+    :global(.profile-title) {
+      font-size: 11pt;
+      margin-bottom: 0.2rem;
+    }
+    
+    :global(.profile-summary) {
+      font-size: 9pt;
+      line-height: 1.2;
+      max-width: 600px;
+      margin: 0 auto;
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Creamos un grid específico para Contacto y Educación */
+    .contact-education-row {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 0.6rem !important; /* Reducir espaciado */
+      margin-bottom: 0.5rem !important; /* Reducir margen */
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+    
+    /* Habilidades arriba de Proyectos */
+    .print-skills {
+      width: 100% !important;
+      margin-bottom: 0.5rem !important; /* Reducir margen */
+      page-break-after: avoid !important;
+      break-after: avoid !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+    
+    /* Proyectos siempre debajo de habilidades */
+    .print-projects {
+      width: 100% !important;
+      page-break-before: avoid !important;
+      break-before: avoid !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+    
+    /* Ajustes adicionales para mantener todo compacto */
+    :global(.skills-section) {
+      padding: 0.4rem !important; /* Reducir padding */
+      margin-bottom: 0.5rem !important;
+    }
+    
+    :global(.skills-grid) {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)) !important; /* Más columnas */
+      gap: 0.2rem !important;
+    }
+    
+    :global(.section-title) {
+      font-size: 12pt; /* Reducir tamaño */
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      padding-bottom: 0.1rem;
+      border-bottom: 1px solid #38b2ac; /* Borde más fino */
+    }
+    
+    :global(.contact-section), :global(.skills-section) {
+      background-color: #f7fafc;
+      padding: 0.4rem !important; /* Reducir padding */
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+    
+    :global(.contact-info) {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem; /* Reducir gap */
+    }
+    
+    :global(.contact-item) {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem; /* Reducir padding */
+      background-color: white;
+      border-radius: 3px;
+      font-size: 8pt; /* Reducir font size */
+    }
+    
+    :global(.contact-item svg) {
+      width: 12px; /* Reducir tamaño de iconos */
+      height: 12px;
+    }
+    
+    :global(.skill-text) {
+      padding: 0.2rem; /* Reducir padding */
+      background-color: white;
+      border-radius: 3px;
+      text-align: center;
+      font-size: 8pt; /* Reducir font size */
+    }
+    
+    /* Proyectos */
+    :global(.timeline) {
+      position: relative;
+      padding-left: 1.2rem; /* Reducir padding */
+    }
+    
+    :global(.timeline::before) {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 5px;
+      width: 1px; /* Línea más delgada */
+      background-color: #e2e8f0;
+    }
+    
+    :global(.timeline-marker) {
+      position: absolute;
+      left: -1.2rem;
+      width: 8px; /* Reducir tamaño */
+      height: 8px;
+      border-radius: 50%;
+      background-color: #38b2ac;
+      border: 1px solid white; /* Borde más fino */
+      z-index: 1;
+    }
+    
+    :global(.timeline-item) {
+      position: relative;
+      margin-bottom: 0.6rem; /* Reducir margen */
+    }
+    
+    :global(.item-title) {
+      font-size: 10pt; /* Reducir tamaño */
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+    
+    :global(.item-description) {
+      font-size: 8pt; /* Reducir tamaño */
+      margin-bottom: 0.2rem;
+      line-height: 1.3;
+    }
+    
+    :global(.technologies) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.2rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    :global(.technology-tag) {
+      font-size: 7pt; /* Reducir tamaño */
+      background-color: #ebf8ff;
+      color: #3182ce;
+      padding: 0.05rem 0.2rem; /* Reducir padding */
+      border-radius: 2px;
+    }
+    
+    :global(.project-link) {
+      font-size: 8pt; /* Reducir tamaño */
+      text-decoration: none;
+    }
+    
+    /* Educación */
+    :global(.education-item) {
+      margin-bottom: 0.6rem; /* Reducir margen */
+    }
+    
+    :global(.institution) {
+      font-size: 10pt; /* Reducir tamaño */
+      font-weight: 600;
+      margin-bottom: 0.1rem;
+    }
+    
+    :global(.degree) {
+      font-size: 9pt; /* Reducir tamaño */
+      margin-bottom: 0.1rem;
+    }
+    
+    :global(.education-date) {
+      font-size: 8pt; /* Reducir tamaño */
+      color: #718096;
+    }
+    
+    :global(.education-type) {
+      font-size: 7pt; /* Reducir tamaño */
+      background-color: #e6fffa;
+      color: #319795;
+      padding: 0.05rem 0.2rem; /* Reducir padding */
+      border-radius: 2px;
+    }
+    
+    /* Mantener el color de los textos */
+    :global(h1), :global(h2), :global(h3), :global(.section-title), :global(.item-title), :global(.institution) {
+      color: #2d3748;
+    }
+    
+    :global(.profile-title), :global(.contact-item svg), :global(.project-link) {
+      color: #38b2ac;
+    }
+    
+    :global(.item-description), :global(.profile-summary), :global(.degree), :global(.contact-item), :global(.skill-text) {
+      color: #4a5568;
+    }
+    
+    /* Prevenir saltos de página en elementos importantes */
+    :global(.timeline-item), :global(.education-item), :global(.contact-section), :global(.skills-section) {
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
   }
 
@@ -171,10 +578,18 @@ const defaultLang = profilesConfig.default;
     .cv-main-content {
       grid-template-columns: 1fr;
     }
+    
+    .print-text {
+      font-size: 0.8rem;
+    }
   }
 </style>
 
 <script>
+  // Importar librerías para generar PDF
+  import { jsPDF } from 'jspdf';
+  import html2canvas from 'html2canvas';
+  
   document.addEventListener('DOMContentLoaded', () => {
     const langButton = document.querySelector<HTMLButtonElement>('.lang-button');
     const contentElements = document.querySelectorAll<HTMLElement>('[data-lang]');
@@ -196,7 +611,7 @@ const defaultLang = profilesConfig.default;
           contentElements.forEach(element => {
             if (element.getAttribute('data-lang') === targetLang) {
               element.classList.remove('hidden');
-            } else {
+            } else if (element.tagName !== 'BUTTON') { // Evitar ocultar el botón de impresión
               element.classList.add('hidden');
             }
           });
@@ -207,7 +622,27 @@ const defaultLang = profilesConfig.default;
           
           langButton.setAttribute('data-lang', newButtonLang);
           langButton.textContent = newButtonText;
+          
+          // Actualizar el texto del botón de impresión
+          const printButton = document.querySelector('.print-button .print-text');
+          if (printButton) {
+            printButton.textContent = targetLang === 'es' ? 'Imprimir CV' : 'Print CV';
+          }
+          
+          // Actualizar el texto del botón de descarga
+          const downloadButton = document.querySelector('.download-button .download-text');
+          if (downloadButton) {
+            downloadButton.textContent = targetLang === 'es' ? 'Descargar PDF' : 'Download PDF';
+          }
         }
+      });
+    }
+    
+    // Botón de descarga ahora usa la misma función de impresión que el botón de imprimir
+    const downloadPdfButton = document.getElementById('download-pdf');
+    if (downloadPdfButton) {
+      downloadPdfButton.addEventListener('click', () => {
+        window.print();
       });
     }
   });
