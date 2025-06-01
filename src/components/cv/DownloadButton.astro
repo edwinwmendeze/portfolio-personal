@@ -49,12 +49,12 @@ const pdfPath = lang === 'en' ? '/cv-edwin-mendez-en.pdf' : '/cv-edwin-mendez-es
   }
   
   /* Soporte para tema oscuro */
-  :global(.dark) .download-button {
+  :root[data-theme="dark"] .download-button {
     background-color: #38b2ac;
     box-shadow: 0 2px 4px rgba(56, 178, 172, 0.5);
   }
   
-  :global(.dark) .download-button:hover {
+  :root[data-theme="dark"] .download-button:hover {
     background-color: #2c7a7b;
     box-shadow: 0 4px 6px rgba(56, 178, 172, 0.6);
   }

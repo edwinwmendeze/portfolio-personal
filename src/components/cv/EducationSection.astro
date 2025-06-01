@@ -1,64 +1,40 @@
 ---
-// Education section
-const { data, defaultLang } = Astro.props;
+// Education section with timeline
+const { data } = Astro.props;
 const { education } = data;
-
-// Format date function
-const formatDate = (dateString: string | undefined) => {
-  if (!dateString) return 'Presente';
-  
-  const date = new Date(dateString);
-  return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long' });
-};
-
-// Format date for English
-const formatDateEn = (dateString: string | undefined) => {
-  if (!dateString) return 'Present';
-  
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-};
 
 interface Education {
   institution: string;
   area: string;
   studyType: string;
   startDate: string;
-  endDate: string;
+  endDate?: string;
 }
+
+const formatDate = (dateString: string) => {
+  if (!dateString) return 'Presente';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'short' });
+};
 ---
 
 <section class="education-section">
-  <div data-lang="en" class={defaultLang === 'es' ? 'hidden' : ''}>
-    <h2 class="section-title">Education</h2>
-    
-    <div class="timeline">
-      {education.map((edu: Education) => (
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <h3 class="item-title">{edu.studyType} in {edu.area}</h3>
-            <p class="item-subtitle">{edu.institution} • {formatDateEn(edu.startDate)} - {edu.endDate ? formatDateEn(edu.endDate) : 'Present'}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
+  <h2 class="section-title">Educación</h2>
   
-  <div data-lang="es" class={defaultLang === 'en' ? 'hidden' : ''}>
-    <h2 class="section-title">Educación</h2>
-    
-    <div class="timeline">
-      {education.map((edu: Education) => (
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <h3 class="item-title">{edu.studyType} en {edu.area}</h3>
-            <p class="item-subtitle">{edu.institution} • {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'Presente'}</p>
-          </div>
+  <div class="timeline">
+    {education.map((edu: Education) => (
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <h3 class="item-title">{edu.institution}</h3>
+          <p class="item-subtitle">{edu.area}</p>
+          <p class="item-date">
+            {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'Presente'}
+          </p>
+          <p class="item-study-type">{edu.studyType}</p>
         </div>
-      ))}
-    </div>
+      </div>
+    ))}
   </div>
 </section>
 
@@ -120,45 +96,48 @@ interface Education {
   }
   
   .item-subtitle {
-    font-size: 0.85rem;
-    color: #718096;
-    margin: 0 0 0.5rem;
+    font-size: 0.95rem;
+    margin: 0 0 0.25rem;
+    color: #4a5568;
+    font-weight: 500;
   }
   
-  .item-details {
-    margin: 0;
-    line-height: 1.5;
-    color: #4a5568;
-    font-size: 0.9rem;
+  .item-date {
+    font-size: 0.8rem;
+    margin: 0 0 0.25rem;
+    color: #718096;
   }
-
-  .hidden {
-    display: none;
+  
+  .item-study-type {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #38b2ac;
+    font-weight: 500;
   }
   
   /* Soporte para tema oscuro */
-  :global(.dark) .section-title {
+  :root[data-theme="dark"] .section-title {
     color: #e2e8f0;
     border-bottom-color: #38b2ac;
   }
   
-  :global(.dark) .timeline::before {
+  :root[data-theme="dark"] .timeline::before {
     background-color: #4a5568;
   }
   
-  :global(.dark) .timeline-marker {
+  :root[data-theme="dark"] .timeline-marker {
     border-color: #2d3748;
   }
   
-  :global(.dark) .item-title {
+  :root[data-theme="dark"] .item-title {
     color: #e2e8f0;
   }
   
-  :global(.dark) .item-subtitle {
+  :root[data-theme="dark"] .item-subtitle {
     color: #a0aec0;
   }
   
-  :global(.dark) .item-details {
-    color: #a0aec0;
+  :root[data-theme="dark"] .item-date {
+    color: #718096;
   }
 </style> 

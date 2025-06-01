@@ -4,28 +4,56 @@ import ProfileSection from './ProfileSection.astro';
 import EducationSection from './EducationSection.astro';
 import SkillsSection from './SkillsSection.astro';
 import ProjectsSection from './ProjectsSection.astro';
+import ContactSection from './ContactSection.astro';
 import DownloadButton from './DownloadButton.astro';
-import profileData from '../../data/profile.json';
+import profilesConfig from '../../data/profiles.json';
+import profileES from '../../data/profile_es.json';
+import profileEN from '../../data/profile_en.json';
+
+// Perfiles por idioma
+const profiles = {
+  es: profileES,
+  en: profileEN
+};
 
 // Default language
-const defaultLang = 'es';
+const defaultLang = profilesConfig.default;
 ---
 
 <div class="page-container">
   <div class="cv-container">
-    <LanguageSwitcher />
+    <LanguageSwitcher activeLang={defaultLang} />
     
     <div class="cv-content" id="cv-content">
-      <ProfileSection data={profileData} defaultLang={defaultLang} />
-      
-      <div class="cv-main-content">
-        <div class="cv-left-column">
-          <ProjectsSection data={profileData} defaultLang={defaultLang} />
-          <EducationSection data={profileData} defaultLang={defaultLang} />
-        </div>
+      <div data-lang="es" class={defaultLang === 'en' ? 'hidden' : ''}>
+        <ProfileSection data={profiles.es} />
         
-        <div class="cv-right-column">
-          <SkillsSection data={profileData} defaultLang={defaultLang} />
+        <div class="cv-main-content">
+          <div class="cv-left-column">
+            <ProjectsSection data={profiles.es} />
+            <EducationSection data={profiles.es} />
+          </div>
+          
+          <div class="cv-right-column">
+            <ContactSection data={profiles.es} />
+            <SkillsSection data={profiles.es} />
+          </div>
+        </div>
+      </div>
+      
+      <div data-lang="en" class={defaultLang === 'es' ? 'hidden' : ''}>
+        <ProfileSection data={profiles.en} />
+        
+        <div class="cv-main-content">
+          <div class="cv-left-column">
+            <ProjectsSection data={profiles.en} />
+            <EducationSection data={profiles.en} />
+          </div>
+          
+          <div class="cv-right-column">
+            <ContactSection data={profiles.en} />
+            <SkillsSection data={profiles.en} />
+          </div>
         </div>
       </div>
       
@@ -69,6 +97,23 @@ const defaultLang = 'es';
     grid-template-columns: 2fr 1fr;
     gap: 2rem;
     margin-top: 2rem;
+    align-items: start;
+  }
+
+  .cv-left-column, .cv-right-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cv-left-column > :first-child,
+  .cv-right-column > :first-child {
+    margin-top: 0;
+  }
+
+  .cv-left-column :global(.section-title:first-child),
+  .cv-right-column :global(.section-title:first-child) {
+    margin-top: 0;
+    padding-top: 0;
   }
   
   .download-section {
@@ -79,12 +124,17 @@ const defaultLang = 'es';
     flex-wrap: wrap;
   }
   
+  /* Clase global para ocultar elementos */
+  :global(.hidden) {
+    display: none !important;
+  }
+  
   /* Soporte para tema oscuro */
-  :global(.dark) .page-container {
+  :root[data-theme="dark"] .page-container {
     background-color: #1a202c;
   }
   
-  :global(.dark) .cv-container {
+  :root[data-theme="dark"] .cv-container {
     background-color: #2d3748;
     color: #e2e8f0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -126,36 +176,39 @@ const defaultLang = 'es';
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const langButtons = document.querySelectorAll<HTMLButtonElement>('.lang-button');
+    const langButton = document.querySelector<HTMLButtonElement>('.lang-button');
     const contentElements = document.querySelectorAll<HTMLElement>('[data-lang]');
     
+    // Obtener el idioma actual de los elementos visibles o usar 'es' como fallback
     let currentLang = 'es';
-    
-    const updateLanguage = (newLang: string) => {
-      currentLang = newLang;
-      
-      langButtons.forEach(button => {
-        button.classList.toggle('active', button.getAttribute('data-lang') === newLang);
-      });
-      
-      contentElements.forEach(element => {
-        if (element.getAttribute('data-lang') === newLang) {
-          element.style.display = 'block';
-        } else {
-          element.style.display = 'none';
-        }
-      });
-    };
-    
-    updateLanguage(currentLang);
-    
-    langButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const lang = button.getAttribute('data-lang');
-        if (lang) {
-          updateLanguage(lang);
-        }
-      });
+    contentElements.forEach(element => {
+      if (!element.classList.contains('hidden')) {
+        currentLang = element.getAttribute('data-lang') || 'es';
+      }
     });
+    
+    // Manejar el clic en el botón de cambio de idioma
+    if (langButton) {
+      langButton.addEventListener('click', () => {
+        const targetLang = langButton.getAttribute('data-lang');
+        if (targetLang) {
+          // Cambiar la visibilidad de los elementos
+          contentElements.forEach(element => {
+            if (element.getAttribute('data-lang') === targetLang) {
+              element.classList.remove('hidden');
+            } else {
+              element.classList.add('hidden');
+            }
+          });
+          
+          // Actualizar el botón con el idioma opuesto
+          const newButtonLang = targetLang === 'es' ? 'en' : 'es';
+          const newButtonText = newButtonLang === 'en' ? 'English' : 'Español';
+          
+          langButton.setAttribute('data-lang', newButtonLang);
+          langButton.textContent = newButtonText;
+        }
+      });
+    }
   });
 </script> 

@@ -1,117 +1,26 @@
 ---
 // Skills section with skills from profile.json
-const { data, defaultLang } = Astro.props;
-const { skills, basics } = data;
+const { data } = Astro.props;
+const { skills } = data;
 
 interface Skill {
   name: string;
   type: string;
   keywords: string[];
 }
-
-interface Profile {
-  network: string;
-  username: string;
-  url: string;
-}
 ---
 
 <section class="skills-section">
-  <div data-lang="en" class={defaultLang === 'es' ? 'hidden' : ''}>
-    {skills.map((skillGroup: Skill) => (
-      <div class="skill-group">
-        <h2 class="section-title">{skillGroup.name}</h2>
-        <div class="skills-grid">
-          {skillGroup.keywords.map((keyword: string) => (
-            <p class="skill-text">{keyword}</p>
-          ))}
-        </div>
+  {skills.map((skillGroup: Skill, index: number) => (
+    <div class="skill-group" style={index === 0 ? 'margin-top: 0;' : ''}>
+      <h2 class="section-title">{skillGroup.name}</h2>
+      <div class="skills-grid">
+        {skillGroup.keywords.map((keyword: string) => (
+          <p class="skill-text">{keyword}</p>
+        ))}
       </div>
-    ))}
-    
-    <h2 class="section-title">Contact</h2>
-    <div class="contact-info">
-      <a href={`mailto:${basics.email}`} class="contact-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-          <polyline points="22,6 12,13 2,6"></polyline>
-        </svg>
-        <span>{basics.email}</span>
-      </a>
-      
-      {basics.profiles.map((profile: Profile) => (
-        <a href={profile.url} target="_blank" class="contact-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-          </svg>
-          <span>{profile.network}</span>
-        </a>
-      ))}
-      
-      <p class="contact-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-          <circle cx="12" cy="10" r="3"></circle>
-        </svg>
-        <span>{basics.location.city}, {basics.location.region}, {basics.location.countryCode}</span>
-      </p>
-      
-      <a href={`tel:${basics.phone}`} class="contact-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-        </svg>
-        <span>{basics.phone}</span>
-      </a>
     </div>
-  </div>
-  
-  <div data-lang="es" class={defaultLang === 'en' ? 'hidden' : ''}>
-    {skills.map((skillGroup: Skill) => (
-      <div class="skill-group">
-        <h2 class="section-title">{skillGroup.name}</h2>
-        <div class="skills-grid">
-          {skillGroup.keywords.map((keyword: string) => (
-            <p class="skill-text">{keyword}</p>
-          ))}
-        </div>
-      </div>
-    ))}
-    
-    <h2 class="section-title">Contacto</h2>
-    <div class="contact-info">
-      <a href={`mailto:${basics.email}`} class="contact-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-          <polyline points="22,6 12,13 2,6"></polyline>
-        </svg>
-        <span>{basics.email}</span>
-      </a>
-      
-      {basics.profiles.map((profile: Profile) => (
-        <a href={profile.url} target="_blank" class="contact-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-          </svg>
-          <span>{profile.network}</span>
-        </a>
-      ))}
-      
-      <p class="contact-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-          <circle cx="12" cy="10" r="3"></circle>
-        </svg>
-        <span>{basics.location.city}, {basics.location.region}, {basics.location.countryCode}</span>
-      </p>
-      
-      <a href={`tel:${basics.phone}`} class="contact-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-        </svg>
-        <span>{basics.phone}</span>
-      </a>
-    </div>
-  </div>
+  ))}
 </section>
 
 <style>
@@ -139,6 +48,10 @@ interface Profile {
     margin-bottom: 1.5rem;
   }
   
+  .skill-group:first-child .section-title {
+    margin-top: 0;
+  }
+  
   .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -156,64 +69,19 @@ interface Profile {
     font-size: 0.8rem;
   }
   
-  .contact-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-  
-  .contact-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #4a5568;
-    margin: 0;
-    padding: 0.4rem;
-    background-color: #f7fafc;
-    border-radius: 4px;
-    font-family: 'JetBrains Mono', monospace;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    font-size: 0.8rem;
-  }
-
-  .contact-item:hover {
-    background-color: #edf2f7;
-    color: #38b2ac;
-  }
-
-  .contact-item svg {
-    color: #38b2ac;
-    flex-shrink: 0;
-  }
-
-  .hidden {
-    display: none;
-  }
-  
   /* Soporte para tema oscuro */
-  :global(.dark) .skills-section {
+  :root[data-theme="dark"] .skills-section {
     background-color: #2d3748;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   }
   
-  :global(.dark) .section-title {
+  :root[data-theme="dark"] .section-title {
     color: #e2e8f0;
     border-bottom-color: #38b2ac;
   }
   
-  :global(.dark) .skill-text {
+  :root[data-theme="dark"] .skill-text {
     background-color: #4a5568;
     color: #e2e8f0;
-  }
-  
-  :global(.dark) .contact-item {
-    background-color: #4a5568;
-    color: #e2e8f0;
-  }
-  
-  :global(.dark) .contact-item:hover {
-    background-color: #2d3748;
-    color: #4fd1c5;
   }
 </style> 

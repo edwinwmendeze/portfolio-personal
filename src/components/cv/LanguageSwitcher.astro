@@ -1,10 +1,16 @@
 ---
 // Language switcher component
+const { activeLang = 'es' } = Astro.props;
+
+// Mostrar el botón opuesto al idioma actual para facilitar el cambio
+const showLang = activeLang === 'es' ? 'en' : 'es';
+const buttonText = showLang === 'en' ? 'English' : 'Español';
 ---
 
 <div class="language-switcher">
-  <button class="lang-button" data-lang="en">English</button>
-  <button class="lang-button active" data-lang="es">Español</button>
+  <button class="lang-button" data-lang={showLang}>
+    {buttonText}
+  </button>
 </div>
 
 <style>
@@ -17,8 +23,9 @@
   }
   
   .lang-button {
-    background: transparent;
-    border: 1px solid #cbd5e0;
+    background-color: #38b2ac;
+    color: white;
+    border: 1px solid #38b2ac;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
@@ -28,12 +35,6 @@
   }
   
   .lang-button:hover {
-    background-color: #edf2f7;
-  }
-  
-  .lang-button.active {
-    background-color: #38b2ac;
-    color: white;
-    border-color: #38b2ac;
+    background-color: #319795;
   }
 </style> 

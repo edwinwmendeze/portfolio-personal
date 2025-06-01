@@ -1,0 +1,7 @@
+{
+  "languages": {
+    "es": "profile_es.json",
+    "en": "profile_en.json"
+  },
+  "default": "es"
+} 

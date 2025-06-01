@@ -95,11 +95,16 @@
       ]
     }
   ],
-  "languages": {
-    "es": "profile_es.json",
-    "en": "profile_en.json"
-  },
-  "default": "es",
+  "languages": [
+    {
+      "language": "Español",
+      "fluency": "Nativo"
+    },
+    {
+      "language": "Inglés",
+      "fluency": "Basico"
+    }
+  ],
   "certificates": [
     {
       "name": "Certificado de Python",
@@ -205,4 +210,4 @@
       ]
     }
   ]
-}
+} 

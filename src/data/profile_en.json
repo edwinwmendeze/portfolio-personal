@@ -8,14 +8,14 @@
   "basics": {
     "name": "Edwin Wilson",
     "last_name": "Méndez Echevarría",
-    "occupation": "Analista de datos con experiencia en Python y automatización de procesos.",
+    "occupation": "Data Analyst with experience in Python and process automation.",
     "image": {
       "remote": "https://github.com/edwinwmendeze.png"
     },
     "email": "edwinwmendez@gmail.com",
     "phone": "(51) 948-924-822",
     "url": "https://edwinwmendeze.github.io/portfolio-personal/",
-    "summary": "Desarrollador backend con experiencia en Python y automatización de procesos. Enfocado en despliegues eficientes, soluciones escalables y mejora continua.",
+    "summary": "Backend developer with experience in Python and process automation. Focused on efficient deployments, scalable solutions, and continuous improvement.",
     "location": {
       "city": "Atalaya",
       "countryCode": "PE",
@@ -75,88 +75,93 @@
       ]
     },
     {
-      "name": "Automatización e Inteligencia Artificial",
+      "name": "Automation & Artificial Intelligence",
       "type": "hard",
       "keywords": [
         "Selenium",
-        "Automatización con Python"
+        "Python Automation"
       ]
     },
     {
-      "name": "Habilidades Blandas",
+      "name": "Soft Skills",
       "type": "soft",
       "keywords": [
-        "Trabajo en equipo",
-        "Trabajo bajo presión",
-        "Resolución de problemas",
-        "Pensamiento crítico",
-        "Adaptabilidad",
-        "Aprendizaje continuo"
+        "Teamwork",
+        "Working under pressure",
+        "Problem solving",
+        "Critical thinking",
+        "Adaptability",
+        "Continuous learning"
       ]
     }
   ],
-  "languages": {
-    "es": "profile_es.json",
-    "en": "profile_en.json"
-  },
-  "default": "es",
+  "languages": [
+    {
+      "language": "Spanish",
+      "fluency": "Native"
+    },
+    {
+      "language": "English",
+      "fluency": "Basic"
+    }
+  ],
   "certificates": [
     {
-      "name": "Certificado de Python",
+      "name": "Python Certificate",
       "issuer": "Coursera",
       "date": "2024-01-01"
     }
   ],
   "work": [
     {
-      "company": "Empresa 1",
-      "position": "Desarrollador",
+      "company": "Company 1",
+      "position": "Developer",
       "startDate": "2020-01-01",
       "endDate": "2021-12-31",
-      "summary": "Descripción de la experiencia laboral",
+      "summary": "Work experience description",
       "highlights": [
-        "Descripción de la experiencia laboral",
-        "Descripción de la experiencia laboral",
-        "Descripción de la experiencia laboral"
+        "Work experience description",
+        "Work experience description",
+        "Work experience description"
       ]
     },
     {
-      "company": "Empresa 2",
-      "position": "Desarrollador",
+      "company": "Company 2",
+      "position": "Developer",
       "startDate": "2020-01-01",
       "endDate": "2021-12-31",
-      "summary": "Descripción de la experiencia laboral",
+      "summary": "Work experience description",
       "highlights": [
-        "Descripción de la experiencia laboral",
-        "Descripción de la experiencia laboral",
-        "Descripción de la experiencia laboral"
+        "Work experience description",
+        "Work experience description",
+        "Work experience description"
       ]
     }
   ],
   "education": [
     {
-      "institution": "Universidad Continental",
-      "area": "Ingeniería de Sistemas e Informática",
-      "studyType": "Ingeniería",
+      "institution": "Continental University",
+      "area": "Systems and Computer Engineering",
+      "studyType": "Engineering",
       "startDate": "2016-03-01",
       "endDate": ""
     },
     {
-      "institution": "Instituto de Alta Tecnologia - IDAT",
-      "area": "Computacion e informatica",
-      "studyType": "Tecnica",
+      "institution": "Institute of High Technology - IDAT",
+      "area": "Computing and Informatics",
+      "studyType": "Technical",
       "startDate": "2005-03-01",
       "endDate": "2007-12-20"
     }
   ],
   "projects": [
     {
-      "name": "Automatización SUP",
-      "description": "Herramienta de automatización de tareas repetitivas desarrollada en Python utilizando pyautogui, diseñada para ejecutar acciones automáticamente desde consola.",
+      "name": "SUP Automation",
+      "description": "Task automation tool developed in Python using pyautogui, designed to execute actions automatically from the console.",
       "highlights": [
-        "Automatización de procesos manuales con precisión",
-        "Interacción con interfaces gráficas mediante control de mouse y teclado",
-        "Facilidad de ejecución desde consola sin interfaz adicional"
+        "Automation of manual processes with precision",
+        "Interaction with graphical interfaces through mouse and keyboard control",
+        "Easy execution from console without additional interface"
       ],
       "url": "https://discord.com/channels/1212350323604201502/1212357244063186955/1214221343319662592",
       "featured": true,
@@ -167,12 +172,12 @@
     },
     {
       "name": "Te Comparto",
-      "description": "Plataforma web para compartir archivos de forma segura, con control de acceso mediante códigos, expiración de enlaces y almacenamiento gestionado con Supabase.",
+      "description": "Web platform for secure file sharing, with access control through codes, link expiration, and storage managed with Supabase.",
       "highlights": [
-        "Interfaz intuitiva para subir y gestionar archivos",
-        "Código de acceso y expiración para compartir de forma segura",
-        "Integración con Supabase para autenticación y almacenamiento",
-        "Diseño adaptable con soporte para modo oscuro"
+        "Intuitive interface for uploading and managing files",
+        "Access code and expiration for secure sharing",
+        "Integration with Supabase for authentication and storage",
+        "Responsive design with dark mode support"
       ],
       "url": "https://tecomparto.com",
       "featured": true,
@@ -186,13 +191,13 @@
       ]
     },
     {
-      "name": "Herramientas SUP",
-      "description": "Suite web de utilidades para procesamiento de archivos institucionales como LIS y PDFs, desarrollada con Astro, Vue y Tailwind CSS.",
+      "name": "SUP Tools",
+      "description": "Web suite of utilities for processing institutional files such as LIS and PDFs, developed with Astro, Vue, and Tailwind CSS.",
       "highlights": [
-        "Procesamiento de archivos .lis con análisis visual",
-        "Fusión y gestión de archivos PDF",
-        "Interfaz modular con componentes Vue",
-        "Despliegue optimizado en Vercel"
+        "Processing of .lis files with visual analysis",
+        "Merging and management of PDF files",
+        "Modular interface with Vue components",
+        "Optimized deployment on Vercel"
       ],
       "url": "https://herramientas-sup.vercel.app/",
       "featured": false,
@@ -205,4 +210,4 @@
       ]
     }
   ]
-}
+} 

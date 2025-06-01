@@ -1,6 +1,6 @@
 ---
 // Profile section with photo and intro
-const { data, defaultLang } = Astro.props;
+const { data } = Astro.props;
 const { basics } = data;
 ---
 
@@ -10,21 +10,11 @@ const { basics } = data;
   </div>
   
   <div class="profile-info">
-    <div data-lang="en" class={defaultLang === 'es' ? 'hidden' : ''}>
-      <h1 class="profile-name">{basics.name} {basics.last_name}</h1>
-      <h2 class="profile-title">{basics.occupation}</h2>
-      <p class="profile-description">
-        {basics.summary}
-      </p>
-    </div>
-    
-    <div data-lang="es" class={defaultLang === 'en' ? 'hidden' : ''}>
-      <h1 class="profile-name">{basics.name} {basics.last_name}</h1>
-      <h2 class="profile-title">{basics.occupation}</h2>
-      <p class="profile-description">
-        {basics.summary}
-      </p>
-    </div>
+    <h1 class="profile-name">{basics.name} {basics.last_name}</h1>
+    <h2 class="profile-title">{basics.occupation}</h2>
+    <p class="profile-description">
+      {basics.summary}
+    </p>
   </div>
 </section>
 
@@ -60,6 +50,7 @@ const { basics } = data;
     position: absolute;
     top: 0;
     left: 0;
+    aspect-ratio: 1/1;
   }
   
   .profile-name {
@@ -83,26 +74,22 @@ const { basics } = data;
     color: #4a5568;
     font-size: 0.95rem;
   }
-
-  .hidden {
-    display: none;
-  }
   
   /* Soporte para tema oscuro */
-  :global(.dark) .profile-section {
+  :root[data-theme="dark"] .profile-section {
     border-bottom: 1px solid #4a5568;
   }
   
-  :global(.dark) .profile-photo {
+  :root[data-theme="dark"] .profile-photo {
     border-color: #2d3748;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   }
   
-  :global(.dark) .profile-name {
+  :root[data-theme="dark"] .profile-name {
     color: #e2e8f0;
   }
   
-  :global(.dark) .profile-description {
+  :root[data-theme="dark"] .profile-description {
     color: #a0aec0;
   }
   
@@ -115,6 +102,7 @@ const { basics } = data;
     
     .profile-photo {
       margin-bottom: 0;
+      flex-shrink: 0;
     }
     
     .profile-description {

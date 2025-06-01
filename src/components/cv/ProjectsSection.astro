@@ -1,6 +1,6 @@
 ---
 // Projects section with timeline
-const { data, defaultLang } = Astro.props;
+const { data } = Astro.props;
 const { projects } = data;
 
 interface Project {
@@ -14,90 +14,45 @@ interface Project {
 ---
 
 <section class="projects-section">
-  <div data-lang="en" class={defaultLang === 'es' ? 'hidden' : ''}>
-    <h2 class="section-title">Projects</h2>
-    
-    <div class="timeline">
-      {projects.map((project: Project) => (
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <h3 class="item-title">{project.name}</h3>
-            <p class="item-description">{project.description}</p>
-            
-            {project.highlights && project.highlights.length > 0 && (
-              <ul class="item-details">
-                {project.highlights.map((highlight: string) => (
-                  <li>{highlight}</li>
-                ))}
-              </ul>
-            )}
-            
-            {project.technologies && project.technologies.length > 0 && (
-              <div class="technologies">
-                {project.technologies.map((tech: string) => (
-                  <span class="technology-tag">{tech}</span>
-                ))}
-              </div>
-            )}
-            
-            {project.url && (
-              <a href={project.url} target="_blank" class="project-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <line x1="10" y1="14" x2="21" y2="3"></line>
-                </svg>
-                <span>View Project</span>
-              </a>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
+  <h2 class="section-title">Proyectos</h2>
   
-  <div data-lang="es" class={defaultLang === 'en' ? 'hidden' : ''}>
-    <h2 class="section-title">Proyectos</h2>
-    
-    <div class="timeline">
-      {projects.map((project: Project) => (
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <h3 class="item-title">{project.name}</h3>
-            <p class="item-description">{project.description}</p>
-            
-            {project.highlights && project.highlights.length > 0 && (
-              <ul class="item-details">
-                {project.highlights.map((highlight: string) => (
-                  <li>{highlight}</li>
-                ))}
-              </ul>
-            )}
-            
-            {project.technologies && project.technologies.length > 0 && (
-              <div class="technologies">
-                {project.technologies.map((tech: string) => (
-                  <span class="technology-tag">{tech}</span>
-                ))}
-              </div>
-            )}
-            
-            {project.url && (
-              <a href={project.url} target="_blank" class="project-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <line x1="10" y1="14" x2="21" y2="3"></line>
-                </svg>
-                <span>Ver Proyecto</span>
-              </a>
-            )}
-          </div>
+  <div class="timeline">
+    {projects.map((project: Project) => (
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <h3 class="item-title">{project.name}</h3>
+          <p class="item-description">{project.description}</p>
+          
+          {project.highlights && project.highlights.length > 0 && (
+            <ul class="item-details">
+              {project.highlights.map((highlight: string) => (
+                <li>{highlight}</li>
+              ))}
+            </ul>
+          )}
+          
+          {project.technologies && project.technologies.length > 0 && (
+            <div class="technologies">
+              {project.technologies.map((tech: string) => (
+                <span class="technology-tag">{tech}</span>
+              ))}
+            </div>
+          )}
+          
+          {project.url && (
+            <a href={project.url} target="_blank" class="project-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+              <span>Ver Proyecto</span>
+            </a>
+          )}
         </div>
-      ))}
-    </div>
+      </div>
+    ))}
   </div>
 </section>
 
@@ -210,38 +165,34 @@ interface Project {
     color: #319795;
     text-decoration: underline;
   }
-
-  .hidden {
-    display: none;
-  }
   
   /* Soporte para tema oscuro */
-  :global(.dark) .section-title {
+  :root[data-theme="dark"] .section-title {
     color: #e2e8f0;
     border-bottom-color: #38b2ac;
   }
   
-  :global(.dark) .timeline::before {
+  :root[data-theme="dark"] .timeline::before {
     background-color: #4a5568;
   }
   
-  :global(.dark) .timeline-marker {
+  :root[data-theme="dark"] .timeline-marker {
     border-color: #2d3748;
   }
   
-  :global(.dark) .item-title {
+  :root[data-theme="dark"] .item-title {
     color: #e2e8f0;
   }
   
-  :global(.dark) .item-description {
+  :root[data-theme="dark"] .item-description {
     color: #a0aec0;
   }
   
-  :global(.dark) .item-details li {
+  :root[data-theme="dark"] .item-details li {
     color: #a0aec0;
   }
   
-  :global(.dark) .technology-tag {
+  :root[data-theme="dark"] .technology-tag {
     background-color: #2a4365;
     color: #90cdf4;
   }
