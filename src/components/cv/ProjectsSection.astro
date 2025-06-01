@@ -3,6 +3,12 @@
 const { data } = Astro.props;
 const { projects } = data;
 
+// Determinar el idioma basado en la presencia de texto en español en el primer proyecto
+const isSpanish = projects.length > 0 && 
+                 (projects[0].description.includes("Herramienta") || 
+                  projects[0].description.includes("desarrollada") ||
+                  projects[0].name.includes("Automatización"));
+
 interface Project {
   name: string;
   description: string;
@@ -14,7 +20,7 @@ interface Project {
 ---
 
 <section class="projects-section">
-  <h2 class="section-title">Proyectos</h2>
+  <h2 class="section-title">{isSpanish ? "Proyectos" : "Projects"}</h2>
   
   <div class="timeline">
     {projects.map((project: Project) => (
@@ -47,7 +53,7 @@ interface Project {
                 <polyline points="15 3 21 3 21 9"></polyline>
                 <line x1="10" y1="14" x2="21" y2="3"></line>
               </svg>
-              <span>Ver Proyecto</span>
+              <span>{isSpanish ? "Ver Proyecto" : "View Project"}</span>
             </a>
           )}
         </div>

@@ -8,6 +8,13 @@ interface Skill {
   type: string;
   keywords: string[];
 }
+
+// Determinar el idioma basado en la presencia de texto en español
+const isSpanish = skills.some((skill: Skill) => 
+  skill.name.includes("Habilidades") || 
+  skill.name.includes("Automatización") || 
+  (skill.keywords && skill.keywords.some((k: string) => k.includes("Trabajo") || k.includes("equipo")))
+);
 ---
 
 <section class="skills-section">

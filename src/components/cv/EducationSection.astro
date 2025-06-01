@@ -3,6 +3,12 @@
 const { data } = Astro.props;
 const { education } = data;
 
+// Determinar el idioma basado en la presencia de texto en español
+const isSpanish = education.length > 0 && 
+                 (education[0].institution.includes("Universidad") || 
+                  education[0].area.includes("Ingeniería") ||
+                  education[0].studyType.includes("Técnica"));
+
 interface Education {
   institution: string;
   area: string;
@@ -12,14 +18,17 @@ interface Education {
 }
 
 const formatDate = (dateString: string) => {
-  if (!dateString) return 'Presente';
+  if (!dateString) return isSpanish ? 'Presente' : 'Present';
   const date = new Date(dateString);
-  return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'short' });
+  return date.toLocaleDateString(isSpanish ? 'es-ES' : 'en-US', { 
+    year: 'numeric', 
+    month: isSpanish ? 'long' : 'short' 
+  });
 };
 ---
 
 <section class="education-section">
-  <h2 class="section-title">Educación</h2>
+  <h2 class="section-title">{isSpanish ? "Educación" : "Education"}</h2>
   
   <div class="timeline">
     {education.map((edu: Education) => (
@@ -29,7 +38,7 @@ const formatDate = (dateString: string) => {
           <h3 class="item-title">{edu.institution}</h3>
           <p class="item-subtitle">{edu.area}</p>
           <p class="item-date">
-            {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'Presente'}
+            {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : (isSpanish ? 'Presente' : 'Present')}
           </p>
           <p class="item-study-type">{edu.studyType}</p>
         </div>
